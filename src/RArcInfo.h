@@ -6,15 +6,6 @@
 #include<Rdefines.h>
 #include"cpl_port.h" /*Needed to set endianness.*/
 
-
-#if R_VERSION < R_Version(1,2,0)
-#define STRING_ELT(x,i)		(STRING(x)[i])
-#define VECTOR_ELT(x,i)	 	(VECTOR(x)[i])
-#define SET_STRING_ELT(x,i,v)	(STRING(x)[i]=(v))
-#define SET_VECTOR_ELT(x,i,v)	(VECTOR(x)[i]=(v))
-#endif
-
-
 #ifdef WIN32 
 #define SLASH 92 /* '\' */
 #else

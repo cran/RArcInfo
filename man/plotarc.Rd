@@ -13,7 +13,7 @@ calling the 'plot' function. Other way, the real boundary of the plotted
 arcs will be used.
 }
 
-\usage{plotarc(arc, new=T, index=NULL, ...)}
+\usage{plotarc(arc, new=TRUE, index=NULL, ...)}
 
 \arguments{
 \item{arc}{The data returned by a call to get.arcdata}

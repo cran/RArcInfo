@@ -1,4 +1,4 @@
-plotpoly <-function(arc,bnd,pal,index=NULL,col, ...)
+plotpoly <-function(arc,bnd,pal,index=NULL,col, xratio=1, yratio=1, ...)
 {
 	if(is.null(index))
 	{
@@ -18,7 +18,7 @@ plotpoly <-function(arc,bnd,pal,index=NULL,col, ...)
 	rdib<-min(par.in$pin[1]/plot.dim[1],par.in$pin[2]/plot.dim[2])
 	plotreg<-c(bnd[[1]],bnd[[1]]+plot.dim[[1]]*rdib,
 			bnd[[2]],bnd[[2]]+plot.dim[[2]]*rdib)
-	par(pin=plot.dim*rdib, usr=plotreg)
+	par(pin=c(xratio,yratio)*plot.dim*rdib, usr=plotreg)
 
 	plot((bnd[1]+bnd[3])/2,(bnd[2]+bnd[4])/2,xlim=c(bnd[1],bnd[3]),
 			ylim=c(bnd[2],bnd[4]),type="n", ...)	

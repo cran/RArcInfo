@@ -141,6 +141,15 @@ the source code. When I have more spare time I will make a beatiful web page too
 
 NEWS
 
+*V 0.4-4
+	- xratio and yratio have been added to plotpoly to control width
+	and height of the plot.
+	- plotpoly have been improved to properly set the plotting
+	region, etc.
+	- Makefile has been deleted and a 'PKG_CFLAGS = -fno-strict-aliasing'
+	has been added to Makevars. This fixes the way numbers are converted
+	to little endian format in avcelib.
+
 *V 0.4-3
 	- RArcInfo started to fail when compiling using gcc 3.x due to
 	the -O3 flag. Two files called Makevars and Makefile have been

@@ -4,3 +4,5 @@ SOURCES = RArcInfo.c avc_e00gen.c avc_e00write.c cpl_conv.c cpl_string.c \
 avc_bin.c avc_e00parse.c avc_misc.c cpl_dir.c cpl_vsisimple.c \
 avc_binwr.c avc_e00read.c avc_rawbin.c cpl_error.c
 OBJECTS = $(SOURCES:.c=.o)
+
+PKG_CFLAGS = -fno-strict-aliasing

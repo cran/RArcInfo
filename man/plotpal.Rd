@@ -10,7 +10,7 @@ plot. The arc definitions are stored in the arc variable, and the polygon
 definitions are in the pal variable.
 }
 
-\usage{plotpal(arc, pal, new=T, index, ...)}
+\usage{plotpal(arc, pal, new=TRUE, index, ...)}
 
 \arguments{
 \item{arc}{The data returned by a call to get.arcdata}
