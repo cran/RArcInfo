@@ -20,8 +20,10 @@ read.coverage<-function(datadir, coverage)
 	if( length(dir(covdir, pattern="tol.adf"))>0 )
 		cov.tol<-get.toldata(datadir, coverage)
 	else
+	{
 		cov.tol<-get.toldata(datadir, coverage, "par.adf")
-
+	}
+	
 	tblnames<-get.tablenames(infodir)
 	
 	pattern<-paste( c(casefold(coverage, upper=TRUE), ".*"), collapse="")

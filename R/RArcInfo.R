@@ -94,11 +94,11 @@ get.tabledata <- function(infodir, tablename)
 	{
 		for (i in 2:l)
 			df<-cbind(df,I(data[[i]]))
-
 	}
 
 	fields<-get.tablefields(infodir, tablename)
 	names(data)<-fields[[1]]
+
 	data
 }
 

@@ -1,12 +1,17 @@
-plotpoly <-function(arc,bnd,pal,index,col, ...)
+plotpoly <-function(arc,bnd,pal,index=NULL,col, ...)
 {
+	if(is.null(index))
+	{
+		index<-1:length(pal[[1]][[1]])
+	}
+
 	lindex<-length(index)
 	col<-rep(col,length.out=lindex)	
 
 #Set aspect ratio and display plotting window
 
 	par.in <- par(no.readonly = TRUE)
-	on.exit(par(par.in))
+#	on.exit(par(par.in))
 
 	plot.dim<-c(bnd[3]-bnd[1], bnd[4]-bnd[2])
 

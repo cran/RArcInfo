@@ -12,6 +12,7 @@ get.cntdata             Function for importing the contents of a CNT
 get.labdata             Funtion for importing the contents of a LAB
                         file into R
 get.namesofcoverages    Function for getting the names of the coverages
+get.nb                  Function for calculating neighbouting polygons.
 get.paldata             Function for importing the contents of a PAL
                         file into R
 get.tabledata           Function for importing the contents of a table

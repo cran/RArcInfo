@@ -79,19 +79,78 @@ In order to plot the data, RArcInfo has several functions:
 other stuff. This is useful to plot maps according the value of some covariate.
   
 
-Finally, to get all the names of the coverages, the user can call 'get.namesofcoverages'.
+To get all the names of the coverages, the user can call 'get.namesofcoverages'.
 
+Other two interesting functions are:
+
+\item thinlines
+
+ Useful to reduce the number of points in an arc according to a given
+ tolerance.
+
+\item get.nb
+
+ Calculates the neighbouring polygons of a given set of polygons.
 }
 
 
 \seealso{get.arcdata, get.bnddata, get.cntdata, get.labdata, get.paldata,
 get.toldata, get.txtdata, get.tablenames, get.tablefields, get.tabledata,
-get.namesofcoverages, read.coverage, thinlines }
+get.namesofcoverages, read.coverage, thinlines, get.nb }
 
 
 \references{
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
+
+\examples{
+library(RArcInfo)
+
+datadir<-system.file("exampleData",package="RArcInfo")
+infodir<-system.file("exampleData","info",package="RArcInfo")
+coveragedir<-system.file("exampleData","wetlands",package="RArcInfo")
+
+#get.bnddata needs the last slash...
+infodir<-paste(c(infodir,"/"), collapse="")
+
+#List all the tables
+
+covnames<-get.namesofcoverages(datadir)
+tablenames<-get.tablenames(infodir)
+
+
+#Display the name of the table and its filds
+for(i in 1:length(tablenames[[1]]))
+{
+	print(c("Table: ",tablenames$TableName[i]))
+
+	fields<-get.tablefields(infodir,tablenames$TableName[i])
+	print("Fields")
+	for(j in 1:length(fields))
+		print(fields[[j]][1])
+
+	#Get the data
+	if(i==1)
+		tabledata<-get.tabledata(infodir,tablenames$TableName[i])
+	else
+		tabledata<-c(tabledata, get.tabledata(infodir,tablenames$TableName[i]) )
+}
+
+#Import data fromsome tables
+arc<-get.arcdata(datadir,"wetlands")
+pal<-get.paldata(datadir,"wetlands")
+lab<-get.labdata(datadir,"wetlands")
+cnt<-get.cntdata(datadir,"wetlands")
+
+bnd<-get.bnddata(infodir,"WETLANDS.BND")
+
+print("Plotting all the arcs")
+plotarc(arc)
+
+print("Plotting the first ten polygons (in red) on the previous plot")
+par(col="red")
+plotpal(arc,pal,new=FALSE, index=1:10)
 }
 
 \keyword{file}

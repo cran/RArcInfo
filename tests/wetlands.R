@@ -43,5 +43,5 @@ plotarc(arc)
 
 print("Plotting the first ten polygons (in red) on the previous plot")
 par(col="red")
-plotpal(arc,list(c(0), pal[[2]][1:10]),new=FALSE)
+plotpal(arc,pal,new=FALSE, index=1:10)
 

@@ -1,4 +1,4 @@
- RArcInfo - 0.4-1
+ RArcInfo - 0.4-2
 
 - INTRODUCTION
 
@@ -140,6 +140,18 @@ I have opened a project at www.sourceforge.net in order to keep there all
 the source code. When I have more spare time I will make a beatiful web page too...
 
 NEWS
+
+*V 0.4-2
+	- 'index' argument added to plotarc to select the arcs to plot.
+	- 'index' argument added to plotpal to select the polygons to plot.
+	- New function 'get.nb', which, given a set of polygons, returns
+	the neighbouring polygons of each one.
+	- Fixed a bug in 'get_tol_data'. The file to be open was of
+	type CNT instead of TOL. Now tolerances are read without problems.
+	- Output messages have been changed in several functions to
+	be more useful for the user.
+	- Fixed a bug in 'plotarc' when calculating plot dimensions.
+	- Example added to RArcInfo documentation file.
 
 *V 0.4-1- 'thinlines' modified to keep the last point of the arcs. Thanks
 	to Erich Neuwirth for this comment.

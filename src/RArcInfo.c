@@ -157,7 +157,6 @@ SEXP get_arc_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	complete_path(pathtofile, (char *)CHAR(STRING_ELT(coverage,0)), 1);
 
-	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileARC)))
 		error("Error opening file");
 
@@ -165,7 +164,7 @@ SEXP get_arc_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextArc(file)){n++;}
 
-	Rprintf("Number of registers:%d\n",n);
+	Rprintf("Number of ARCS:%d\n",n);
 
 
 	table=calloc(7,sizeof(SEXP));
@@ -291,7 +290,6 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename)
 
 
 	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
-	printf("File opened:%s\n",pathtofile);
 
 
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFilePAL)))
@@ -301,7 +299,7 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextPal(file)){n++;}
 
-	Rprintf("Number of registers:%d\n",n);
+	Rprintf("Number of POLYGONS:%d\n",n);
 
 	idata=calloc(3,sizeof(int *));
 
@@ -400,7 +398,6 @@ SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)),1);
 
-	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileLAB)))
 		error("Error opening file");
 
@@ -408,7 +405,7 @@ SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextLab(file)){n++;}
 
-	printf("%d\n",n);
+	Rprintf("Number of LABELS:%d\n",n);
 
 
 	table=calloc(8, sizeof(SEXP));
@@ -477,7 +474,6 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)),1);
 
-	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileCNT)))
 		error("Error opening file");
 
@@ -485,7 +481,7 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextCnt(file)){n++;}
 
-	printf("%d\n",n);
+	Rprintf("Number of CENTROIDS:%d\n",n);
 
 	table=calloc(4, sizeof(SEXP));
 	pdata=calloc(4,sizeof(void *));
@@ -564,17 +560,15 @@ SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename)
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
 
-	printf("%s\n",pathtofile);
-	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileCNT)))
+	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileTOL)))
 		error("Error opening file");
 
 	n=0;
 
 	while(AVCBinReadNextTol(file)){n++;}
 
-	printf("%d\n",n);
-
-
+	Rprintf("Number of TOLERANCES:%d\n", n);
+	
 	table=calloc(3, sizeof(SEXP));
 	pdata=calloc(3, sizeof(void *));
 
@@ -590,7 +584,6 @@ SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	for(i=0;i<n;i++)
 	{
-		printf("%d\n",i);
 		if(!(reg=(AVCTol*)AVCBinReadNextTol(file)))
 			error("Error while reading register");
 
@@ -629,7 +622,6 @@ SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename)
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
 
-	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileTXT)))
 		error("Error opening file");
 
@@ -637,7 +629,7 @@ SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextTxt(file)){n++;}
 
-	printf("%d\n",n);
+	Rprintf("Number of TxT ANNOTATIONS:%d\n",n);
 
 
 	table=calloc(6, sizeof(SEXP));
