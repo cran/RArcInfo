@@ -1,3 +1,3 @@
 .First.lib <- function(lib, pkg) {
-	library.dynam("RArcInfo", pkg, lib)
+	library.dynam("RInfo", pkg, lib)
 }

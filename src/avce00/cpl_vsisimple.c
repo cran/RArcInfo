@@ -30,12 +30,6 @@
  *    instance validation of access strings to fopen().
  * 
  * $Log: cpl_vsisimple.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:57  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:14  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.1  1999/08/27 14:09:55  daniel
  * Update CPL files
  *

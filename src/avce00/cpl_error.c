@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: cpl_error.c,v 1.1.1.1 2001/06/27 20:10:57 vir Exp $
+ * $Id: cpl_error.c,v 1.2 1999/11/23 04:18:45 daniel Exp $
  *
  * Name:     cpl_error.cpp
  * Project:  CPL - Common Portability Library
@@ -29,12 +29,6 @@
  **********************************************************************
  *
  * $Log: cpl_error.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:57  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:14  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.2  1999/11/23 04:18:45  daniel
  * Fixed var. initialization that failed to compile in C
  *

@@ -1,13 +1,19 @@
 \name{get.tablenames}
 \alias{get.tablenames}
 
-\title{Function for reading the names of the tables in the coverages}
+\title{Read names of the tables in the coverages}
 \description{
-This function reads the arc.dat file in the info directory and it returns a list
+Reads the arc.dat file in the info directory and returns a list
 with some data about the tables. Each element of this list is 
 another list with data from a single table.
+
+
 }
 
+
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 
 \usage{get.tablenames(infodir)}
 
@@ -31,12 +37,4 @@ A list with some information about the tables stored in all the coverages:
 \item{Number of records}
 
 \item{Internal/External Table (FALSE/TRUE)}
-	}
 }
-
-\references{
-More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
-}
-
-\keyword{file}

@@ -5,7 +5,7 @@
 \description{
 
 Taking as argument the list returned by the get.arcdata function,
-this function plots all the arcs. With the argument new the user can decide
+plots all the arcs. With the argument new the user can decide
 whether plot on a new window/device or on the last window/device.
 
 \usage{plotarc(arc, new=T)}
@@ -18,5 +18,3 @@ whether plot on a new window/device or on the last window/device.
 \value{
 This function returns nothing, but plots a nice map :-D.
 }
-
-\keyword{hplot}

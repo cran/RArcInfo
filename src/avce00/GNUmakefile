@@ -1,14 +1,8 @@
 # Makefile for the Arc/Info Vector Coverage (AVC) reader 
 #
-# $Id: GNUmakefile,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+# $Id: GNUmakefile,v 1.3 1999/05/11 02:06:54 daniel Exp $
 #
 # $Log: GNUmakefile,v $
-# Revision 1.1.1.1  2001/06/27 20:10:53  vir
-# Initial release (0.1) under the cvs tree at Sourceforge.
-#
-# Revision 1.1.1.1  2001/06/27 20:04:14  vir
-# Initial release (0.1) under the CVS tree.
-#
 # Revision 1.3  1999/05/11 02:06:54  daniel
 # Added coverage write support (alpha version)
 #

@@ -2,48 +2,41 @@
 \alias{get.arcdata}
 
 
-\title{Function for importing the contents of an ARC file into R}
+\title{Imports the contents of an ARC file into R}
 \description{
-This function reads and imports into R the  contents of an arcs definition file.
+Reads the  contents of an arcs definition file and imports it into R.
 }
 
 
-\usage{get.arcdata(infodir, coverage, filename="arc.adf")}
+\usage{get.arcdata(infodir, coverage, filename)}
 
 \arguments{
-\item{infodir}{Directory where there is a file called arc.dat (usually it is called 'info').}
-\item{coverage}{The name of the coverage we want to work with.}
+\item{infodir}{Info directory where there is a file called arc.dat}
+\item{coverage}{The name of the coverage we want to work with}
 \item{filename}{The name of the file in the coverage directory that
-stores the data. By default, it is called 'arc.dat'.}
+stores the data}
 }
 
 \value{
-This function returns a list with two elements. The first one is a data
-frame containing the next fields (by columns):
+This function returns a list in which every item is a list with
+the next fields:
 
-\item{ArcID}{A number that identifies this arc.}
+\item{Arc ID}{A number that identifies this arc.}
 
-\item{ArcUserID}{I don't know what this exactly means. Please, remind me to fix this.}
+\item{Arc User ID}{I don't know what this exactly means. Please, remind me to fix this.}
 
-\item{FromNode}{The node where the arc begins.}
+\item{From Node}{The node where the arc begins.}
 
-\item{ToNode}{The node where the arc finishes.}
+\item{To Node}{The node where the arc finishes finishes.}
 
-\item{LeftPoly}{The number of the polygon that is to the left of the arc.}
+\item{Left Polygon}{The number of the polygon that is to the left of the arc.}
 
-\item{RightPoly}{The number of the polygon that is to the right of the arc.}
+\item{Right Polygon}{The number of the polygon that is to the right of the arc.}
 
-\item{NVertices}{The number of vertices the arc has.}
+\item{Number of vertices}
 
-The second element is a list that stores the vertices of the arc. So, each element
-in this list is also a list of two arrays: the first for the X coordinates
-and the secod for the Y coordinates.
-}
+\item{Vertices list}{An array with all the coordinates (x,y) of the vertices.}
 
-
-\references{
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
 }
-
-\keyword{file}
