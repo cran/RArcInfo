@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_misc.c,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+ * $Id: avc_misc.c,v 1.2 1999/08/23 18:24:27 daniel Exp $
  *
  * Name:     avc_misc.c
  * Project:  Arc/Info vector coverage (AVC)  BIN<->E00 conversion library
@@ -28,12 +28,6 @@
  **********************************************************************
  *
  * $Log: avc_misc.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:53  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:10  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.2  1999/08/23 18:24:27  daniel
  * Fixed support for attribute fields of type 40
  *

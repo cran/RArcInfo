@@ -1,41 +1,31 @@
 \name{get.labdata}
 \alias{get.labdata}
 
-\title{Funtion for importing  the contents of a LAB file into R}
+\title{Imports the contents of a LAB file into R}
 \description{
-This function reads and imports into R the  contents of a polygon labels definition file.
+Reads the  contents of a polygon labels definition file and imports it 
+into R. 
 }
 
-\usage{get.labdata(datadir, coverage, filename="lab.adf")}
+\usage{get.labdata(infodir, coverage, filename="lab.adf")}
 
 \arguments{
-\item{datadir}{Directory under which iall the coverages and a directory called 'info' are.}
+\item{infodir}{Info directory where there is a file called arc.dat}
 \item{coverage}{The name of the coverage we want to work with}
 \item{filename}{The name of the file in the coverage directory that
-stores the data. By default, called 'lab.adf'.}
+stores the data}
 }
 
 \value{
-This function returns a data frame with the next fields (by columns):
+This functions returns a list in which every item is a list with
+the next fields:
 
-\item{LabelUserID}{The label of the polygon.}
+\item{Label Value}{The label of the polygon.}
 
-\item{PolygonID}{The polygon related to the label.}
+\item{Polygon ID}{The polygon related to the label.}
 
-\item{Coord1X}{The X component of the first coordinate.}
+\item{Coordiantes}{A vector with three pairs of (X,Y) coordinates.}
 
-\item{Coord2X}{The X component of the second coordinate.}
-
-\item{Coord3X}{The X component of the third coordinate.}
-
-\item{Coord1Y}{The Y component of the first coordinate.}
-
-\item{Coord2Y}{The Y component of the second coordinate.}
-
-\item{Coord3Y}{The Y component of the third coordinate.}
-}
-
-\references{
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
 }

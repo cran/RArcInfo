@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: cpl_string.h,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+ * $Id: cpl_string.h,v 1.2 1999/10/29 06:10:12 daniel Exp $
  *
  * Name:     cpl_string.h
  * Project:  CPL - Common Portability Library
@@ -29,12 +29,6 @@
  **********************************************************************
  *
  * $Log: cpl_string.h,v $
- * Revision 1.1.1.1  2001/06/27 20:10:53  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:10  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.2  1999/10/29 06:10:12  daniel
  * Updated cpl_string.*
  *

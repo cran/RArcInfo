@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_rawbin.c,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+ * $Id: avc_rawbin.c,v 1.6 1999/08/29 15:05:43 daniel Exp $
  *
  * Name:     avc_rawbin.c
  * Project:  Arc/Info vector coverage (AVC)  BIN->E00 conversion library
@@ -28,12 +28,6 @@
  **********************************************************************
  *
  * $Log: avc_rawbin.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:53  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:10  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.6  1999/08/29 15:05:43  daniel
  * Added source filename in "Attempt to read past EOF" error message
  *

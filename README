@@ -1,27 +1,17 @@
- RArcInfo - 0.1
+ RINFO - 0.03    >>>>> ALPHA SOFTWARE!!! <<<<<
 
-- INTRODUCTION
-
- This package enables R to import data from Arc/Info  V7.x binary
+ This package enbales R to import data from Arc/Info  V7.x binary
 coverages. It uses the wonderful functions written by 
 Daniel Morissette <damno@videotron.ca> to import/export data
-from binary coverages from/to E00 ASCII files.
-Please, notice that all the code under the RArcInfo/src/avce00 is
-copyright of Daniel Morissette, who is the original writter.
+from binary coverages from/to E00 ascii files.
+Please, notice that all the code under the RInfo/avce00 is
+copyright of Daniel Morissette, who is the writter.
 I didn't write any code inside this directory.
 
-Since all the code must be in the RArcInfo/src directory (and Windo$s doesn't allow
-symbolic links), I have copied some files from RArcInfo/src/avce00 to it. 
-The only files I have written are RArcInfo.c and RArcInfo.h. All the other ones 
-are copyrighted by Daniel Morissette.
+ Basically, there is a function to import each type of file (ARC, LAB, etc.).
+Please, notice that RInfo is a work in progress.
 
-- THE CODE
-
- Basically, there is a function to import each type of file (ARC, LAB, etc.) in the
-coverage directory.
-Please, notice that RArcInfo is a work in progress.
-
- Nowadays, the list of functions RArcInfo provides is:
+ Nowadays, the list of functions RInfo provides is:
 
 -get.namesofcoverages(dir)
 
@@ -38,45 +28,38 @@ records. More information about this can be found in the help.
 
  Returns the name of the fields of the given table.
 
-- get.XXXdata(datadir, coverage, filename)
+- get.XXXdata(directory, coverage, filename)
 
   Returns the data of the given filename into a R list. XXX can be:
 
-   arc, pal, lab, cnt, tol, txt
-
-- get.bnddata (infodir, tablename)
-
- Returns the boundary coordinates of the geographical data.
+   arc, bnd, pal, lab, cnt, tol
 
 - get.tabledata(infodir, coverage, tablename)
 
 
 There also also another two functions to plot arcs:
 
-- plotarc(arc, new=T)
+-plotarc(arc, new=T)
 
  This plot all the arcs returned by get.arcdata. If we want
 to rebuild the limits in the axis we should set new=T. In other case 
 we should set new=F. This is useful when you want to draw some coverages.
 
-- plotpal(arc, pal, new=T)
+plotpal(arc,pal, new=T)
 
  Now we only plot the arcs defined by pal (returned from a call to 
 get.pladata).
 
-
-
-
-* EXAMPLE
+*EXAMPLE
 
 Let us suppose we have all the data (in format Arc/Info V7.x) under the directory
 /usr/gis/data. We'll have a directory called "info", where some files with information
 about all the coverages is stored. We have two coverages called "Lakes" and "Rivers"
 under the directories "lakes" and "rivers".
 
-/usr/gis/data--/
-               |
-	       |
+/usr/gis/data-/
+              |
+	      |
 	    |-----|------|
 	   info  lakes rivers
 
@@ -90,15 +73,15 @@ are stored. This is the more common name, but it may change.
 
 To import the polygons  we write:
 
-pallakes<-get.paldata("/usr/gis/data/","lakes","pal.adf")
+pallakes<-get.arcdata("/usr/gis/data/","lakes","pal.adf")
 
 To plot all the lakes:
 
 plotpal(arclakes, pallakes)
 
+To plot only the first and second lake:
 
-You can find another example under the directory "tests" in the source package.
-
+plotpal(arclakes, pallakes[[1:2]])
 
 * TODO
 
@@ -122,48 +105,9 @@ countries around it. I only took the data from wetlands because of its small
 size, but there are many more data available to download for free there.
 
 
-ABOUT RARCINFO AND ARC/VIEW
-
-Some people have written to me asking whether this package is able to import/export
-data from/to Arc/View in the same way that the extension for the S-Plus does. 
-The answer is no, but I think it can be done using the R-(D)COM server and
-writting the code for this (of course ;-) ).
-
-I know , from version 8.1, ArcView supports VB scripts, so it should be easy
-to write some connection between R and ArcView...
-
-
-
-RARCINFO AT SOURCEFORGE
-
-I have opened a project at www.sourceforge.net in order to keep there all
-the source code. When I have more spare time I will make a beatiful web page too...
-
 NEWS
 
-* V 0.2
-	- Added a new function to plot polygons (plotpoly).
-	- get.tabledata labels the columns using get.tablefields.
-	- Added a function to import TXT data (get_txt_data).
-	- Fixed a bug in the documentation. "infodir" has been changed to
-	 "datadir" in most functions.
-	- Added a new manual page about the whole package. Try 'help(RArcInfo)'.
-
-* V 0.1
-	- Function get.bnddata now works properly.
-	- The data returned by the functions get.XXXdata (XXX=arc, pal, cnt) have been
-	changed to a data frame (a table with some fields of the data and named columns) and 
-	a list (that stores de coordinates of the points, etc.). 
-	- Besides, the data returned by the functions get.tablenames, get.tablefields, 
-	get.tabledata, get.XXXdata (XXX=lab, tol) has changed too. Now they are
-	data frames with named columns.
-	- get.namesofcoverages now returns only the names of the directories where
-	the data are stored.
-	- The links to Daniel's code has been deleted and I have copied the files
-	into the src directory in order to be able to compile the package for
-	Windows.
-
-* V 0.03
+* V 0.3
 	- Added some example data and a test.
 	- Added some defaults values for the variable "filename" in some get.XXXdata functions.
 	- Fixed some minor bugs.
@@ -173,16 +117,3 @@ NEWS
 Enjoy!
 
  Virgilio Gómez Rubio
-
-
-P.S:
-
- If you find this package useful, please, feel free to make suggestions to improve it
-and to send (nice) postcards to:
-
-  Virgilio Gómez Rubio
-  Dpto. Estadística e I.O.
-  Facultad de Matemáticas
-  Avda. Vicent A. Estellés, 1
-  46100 Burjassot (València)
-  Spain

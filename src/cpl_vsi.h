@@ -32,12 +32,6 @@
  * specific checking, io redirection and so on. 
  * 
  * $Log: cpl_vsi.h,v $
- * Revision 1.1.1.1  2001/06/27 20:10:53  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:10  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.1  1999/08/27 14:09:55  daniel
  * Update CPL files
  *

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_bin.c,v 1.1.1.1 2001/06/27 20:10:54 vir Exp $
+ * $Id: avc_bin.c,v 1.6 1999/08/23 18:17:16 daniel Exp $
  *
  * Name:     avc_bin.c
  * Project:  Arc/Info vector coverage (AVC)  BIN->E00 conversion library
@@ -28,12 +28,6 @@
  **********************************************************************
  *
  * $Log: avc_bin.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:54  vir
- * Initial release (0.1) under the cvs tree at Sourceforge.
- *
- * Revision 1.1.1.1  2001/06/27 20:04:11  vir
- * Initial release (0.1) under the CVS tree.
- *
  * Revision 1.6  1999/08/23 18:17:16  daniel
  * Modified AVCBinReadListTables() to return INFO fnames for DeleteCoverage()
  *

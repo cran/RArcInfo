@@ -5,9 +5,8 @@
 \description{
 
 Taking as argument the list returned by the get.arcdata function,
-this function plots all the arcs. With the argument new the user can decide
-whether to plot on a new window/device or on the last window/device.
-}
+plots all the arcs. With the argument new the user can decide
+whether plot on a new window/device or on the last window/device.
 
 \usage{plotarc(arc, new=T)}
 
