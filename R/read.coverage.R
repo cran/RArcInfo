@@ -1,7 +1,7 @@
 read.coverage<-function(datadir, coverage)
 {
-	infodir<-paste(c(datadir,"info/"), collapse="")
-	covdir<-paste(c(datadir, coverage), collapse="")
+	infodir<-paste(c(datadir,"/info/"), collapse="")
+	covdir<-paste(c(datadir, "/",coverage), collapse="")
 
 	cov.arc<-get.arcdata(datadir, coverage)
 	cov.cnt<-get.cntdata(datadir, coverage)

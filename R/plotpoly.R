@@ -1,12 +1,16 @@
-plotpoly <-function(arc,bnd,pal,index=NULL,col, xratio=1, yratio=1, ...)
+plotpoly <-function(arc,bnd,pal,index=NULL,col, border=NULL, xratio=1, yratio=1, ...)
 {
 	if(is.null(index))
-	{
 		index<-1:length(pal[[1]][[1]])
-	}
 
 	lindex<-length(index)
 	col<-rep(col,length.out=lindex)	
+	
+	if(is.null(border))
+		border<-rep("black", length(col))
+	else
+		border<-rep(border, length.out=lindex)
+
 
 #Set aspect ratio and display plotting window
 
@@ -36,7 +40,6 @@ plotpoly <-function(arc,bnd,pal,index=NULL,col, xratio=1, yratio=1, ...)
 
 	for(i in 1:lindex)
 	{
-
 
 #Now, we plot the polygons
 
@@ -79,12 +82,14 @@ plotpoly <-function(arc,bnd,pal,index=NULL,col, xratio=1, yratio=1, ...)
 						print("The polygon isn't closed")
 						x<-c(x,x[1])
 						y<-c(y,y[1])
-					
-						polygon(x,y,col=col[match(index[i], index)])
+						
+						idx<-match(index[i], index)
+						polygon(x,y,col=col[idx], border=border[idx])
 					}
 					else
 					{
-						polygon(x,y,col=col[match(index[i], index)])
+						idx<-match(index[i], index)
+						polygon(x,y,col=col[idx], border=border[idx])
 					}
 
 					x<-c()
@@ -103,7 +108,9 @@ plotpoly <-function(arc,bnd,pal,index=NULL,col, xratio=1, yratio=1, ...)
 				x<-c(x,x[1])
 				y<-c(y,y[1])
 			}
-			polygon(x,y,col=col[match(index[i], index)])
+
+			idx<-match(index[i], index)
+			polygon(x,y,col=col[idx], border=border[idx])
 		}
 	}
 }

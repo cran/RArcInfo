@@ -120,7 +120,7 @@ covnames<-get.namesofcoverages(datadir)
 tablenames<-get.tablenames(infodir)
 
 
-#Display the name of the table and its filds
+#Display the name of the table and its fields
 for(i in 1:length(tablenames[[1]]))
 {
 	print(c("Table: ",tablenames$TableName[i]))
@@ -137,7 +137,7 @@ for(i in 1:length(tablenames[[1]]))
 		tabledata<-c(tabledata, get.tabledata(infodir,tablenames$TableName[i]) )
 }
 
-#Import data fromsome tables
+#Import data from some tables
 arc<-get.arcdata(datadir,"wetlands")
 pal<-get.paldata(datadir,"wetlands")
 lab<-get.labdata(datadir,"wetlands")
