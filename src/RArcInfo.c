@@ -843,3 +843,103 @@ void complete_path(char *path1, char *path2, int dir)
 
 	path1[l]='\0';
 }
+
+
+/*
+Code taken from the file avcimport.c
+Used to convert an E00 file into an Arc/Info binary coverage.
+ */
+
+/**********************************************************************
+ *                          ConvertCover()
+ *
+ * Create a binary coverage from an E00 file.
+ *
+ * It would be possible to have an option for the precision... coming soon!
+ **********************************************************************/
+static void ConvertCovere00toavc(FILE *fpIn, const char *pszCoverName)
+{
+    AVCE00WritePtr hWriteInfo;
+    const char *pszLine;
+
+    hWriteInfo = AVCE00WriteOpen(pszCoverName, AVC_DEFAULT_PREC);
+
+    if (hWriteInfo)
+    {
+        while (CPLGetLastErrorNo() == 0 &&
+               (pszLine = CPLReadLine(fpIn) ) != NULL )
+        {
+            AVCE00WriteNextLine(hWriteInfo, pszLine);
+        }
+
+        AVCE00WriteClose(hWriteInfo);
+    }
+}
+
+
+/* This is the R wrapper to the previous function to convert a E00 file to
+ * an Arc/Info binary coverage*/
+
+SEXP e00toavc (SEXP e00file, SEXP avcdir)
+{
+	FILE *fpIn;
+
+	fpIn = fopen( CHAR(STRING_ELT(e00file,0)), "rt");
+
+	if (fpIn == NULL)
+	{
+		error("Cannot open E00 file\n");
+	}
+
+	ConvertCovere00toavc(fpIn, CHAR(STRING_ELT(avcdir,0)));
+
+	fclose(fpIn);
+
+	return R_NilValue;
+}
+
+
+/* COde taken from avcexport.c*/
+
+/**********************************************************************
+ *                          ConvertCover()
+ *
+ * Convert a complete coverage to E00.
+ **********************************************************************/
+static void ConvertCoveravctoe00(const char *pszFname, FILE *fpOut)
+{
+    AVCE00ReadPtr hReadInfo;
+    const char *pszLine;
+
+    hReadInfo = AVCE00ReadOpen(pszFname);
+
+    if (hReadInfo)
+    {
+        while ((pszLine = AVCE00ReadNextLine(hReadInfo)) != NULL)
+        {
+            fprintf(fpOut, "%s\n", pszLine);
+        }
+
+        AVCE00ReadClose(hReadInfo);
+    }
+}
+
+/* Code to convert from a binary coverage to an E00 file*/
+
+SEXP avctoe00 (SEXP avcdir, SEXP e00file)
+{
+	FILE *fpOut;
+
+	fpOut = fopen( CHAR(STRING_ELT(e00file,0)), "wt");
+
+	if (fpOut == NULL)
+	{
+		error("Cannot create E00 file\n");
+	}
+
+	ConvertCoveravctoe00( CHAR(STRING_ELT(avcdir,0)), fpOut);
+
+	fclose(fpOut);
+
+	return R_NilValue;
+}

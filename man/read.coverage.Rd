@@ -10,9 +10,10 @@ most important.
 Tables are not imported, but a dataframe containig the information provided by
 a call to get.tablenames of all the tables related to the coverage.
 
-Neither Polygon definitions files are imported. For a single coverage there
-can be more than one pal file, so their names are imported. Then, the user
-can choose which one to import by calling get.paldata.
+For a single coverage there can be more than one pal file, so just their names
+are imported (into 'palfiles'). Then, the user can choose which one to import
+by calling get.paldata.  But, if there is just one pal file, it is imported
+into 'pal'.
 
 The names of the different files are supposed to be the default names when
 calling the proper get.XXXdata. If some of these names change then the
@@ -44,9 +45,13 @@ when this function was called.}
 
 \item{lab}{The label point records of the coverage.}
 
-\item{pal}{The names of all the polygon definitions files.}
+\item{pal}{If there is just one file for the polygon definitions inside the 
+coverage, it is imported here using get.paldata. Otherwise, it is filled 
+with a 'NULL'.}
 
-\item{tbln}{The description of all the tables related to the coverage,
+\item{palfiles}{The names of all the polygon definitions files.}
+
+\item{tblnames}{The description of all the tables related to the coverage,
 as returned by get.tablenames.}
 
 \item{tol}{The tolerance values.}

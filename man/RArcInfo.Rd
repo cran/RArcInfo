@@ -84,9 +84,9 @@ Finally, to get all the names of the coverages, the user can call 'get.namesofco
 }
 
 
-\seealso{get.arcdata, get.bnddata, get.cntdata, get.labdata, get.paldata, get.toldata, 
-get.txtdata, get.tablenames, get.tablefields, get.tabledata, get.namesofcoverages
-}
+\seealso{get.arcdata, get.bnddata, get.cntdata, get.labdata, get.paldata,
+get.toldata, get.txtdata, get.tablenames, get.tablefields, get.tabledata,
+get.namesofcoverages, read.coverage, thinlines }
 
 
 \references{

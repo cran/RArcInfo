@@ -1,10 +1,10 @@
 Package: RArcInfo
-Version: 0.3
-Date: 2002/07/30
+Version: 0.4
+Date: 2002/10/24
 Title: Functions to import data from Arc/Info V7.x binary coverages
 Author: Virgilio Gómez-Rubio <virgilio.gomez@uv.es>
 Maintainer: Virgilio Gómez-Rubio <virgilio.gomez@uv.es>
-Depends: R (>= 1.4.0)
+Depends: R (>= 1.6.0)
 Description: This package uses the functions written by Daniel 
  Morissette <danmo@videotron.ca> to read geographical information in Arc/Info 
  V 7.x format to import the coverages into R variables.

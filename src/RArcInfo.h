@@ -37,4 +37,11 @@ SEXP get_table_data(SEXP infodir, SEXP tablename);
 SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename);
 
 void complete_path(char *path1, char *path2, int dir);
+
+static void ConvertCovere00toavc(FILE *fpIn, const char *pszCoverName);
+SEXP e00toavc (SEXP e00file, SEXP avcdir);
+
+static void ConvertCoveravctoe00(const char *pszFname, FILE *fpOut);
+SEXP avctoe00 (SEXP avcdir, SEXP e00file);
+
 #endif

@@ -1,4 +1,4 @@
- RArcInfo - 0.3
+ RArcInfo - 0.4
 
 - INTRODUCTION
 
@@ -140,6 +140,14 @@ I have opened a project at www.sourceforge.net in order to keep there all
 the source code. When I have more spare time I will make a beatiful web page too...
 
 NEWS
+
+*V 0.4	- Two new functions added to convert from/to ArcInfo binary
+	coverages to/from E00 files: 'e00toavc' and 'avctoe00'.
+	- 'read.coverage' now reads the polygon definiton file is
+	there exists just one file for that inside the coverage.
+	- New function 'thinlines', which reduces the number of
+	points in the arc definition object (returned by get.arcdata).
+	Using the thinned 'arc object' will speed up R when plotting.
 
 *V 0.3
 	- The argument '...' has been added to all the plotting functoins

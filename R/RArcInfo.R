@@ -102,3 +102,12 @@ get.tabledata <- function(infodir, tablename)
 	data
 }
 
+e00toavc <- function(e00file, avcdir)
+{
+	.Call("e00toavc", as.character(e00file), as.character(avcdir))
+}
+
+avctoe00 <- function(avcdir, e00file)
+{
+	.Call("avctoe00", as.character(avcdir), as.character(e00file) ) 
+}

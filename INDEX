@@ -24,5 +24,3 @@ plotarc                  Plots the data imported from an ARC file
 plotpal                  Plots the data imported from an ARC file
                          according to the contents of a PAL file
 plotpoly                 Plots polygons defined by the coverages.
-read.coverage            Function for retrieving basic data from a given
-                         coverage
