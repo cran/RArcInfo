@@ -293,9 +293,13 @@ if(!(tablefile=_AVCBinReadOpenTable( CHAR(STRING_ELT(info_dir,0)), CHAR(STRING_E
 
 	d=REAL(data);
 
-// //Fix this: The data can be of type float too.
 	for(i=0;i<4;i++)
-		d[i]=datafield[i].dDouble;
+	{
+		if(tablefile->nPrecision==AVC_SINGLE_PREC)
+			d[i]=datafield[i].fFloat;
+		else//Default and DOUBLE precicion
+			d[i]=datafield[i].dDouble;
+	}
 
 	UNPROTECT(1);
 
@@ -813,11 +817,17 @@ SEXP get_table_data(SEXP infodir, SEXP tablename)
 				break;
 
 				case 5:
-				((int *)pdata[j])[i]=reg[j].nInt32;
+				if(file->nPrecision==AVC_SINGLE_PREC)
+					((int *)pdata[j])[i]=reg[j].nInt16;
+				else//Default and double precision
+					((int *)pdata[j])[i]=reg[j].nInt32;
 				break;
 				
 				case 6:
-				((double *)pdata[j])[i]=reg[j].dDouble;
+				if(file->nPrecision==AVC_SINGLE_PREC)
+					((double *)pdata[j])[i]=reg[j].fFloat;
+				else//Default and double precision
+					((double *)pdata[j])[i]=reg[j].dDouble;
 				break;
 			}
 		}

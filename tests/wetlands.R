@@ -4,6 +4,9 @@ datadir<-system.file("exampleData",package="RArcInfo")
 infodir<-system.file("exampleData","info",package="RArcInfo")
 coveragedir<-system.file("exampleData","wetlands",package="RArcInfo")
 
+#get.bnddata needs the last slash...
+infodir<-paste(c(infodir,"/"), collapse="")
+
 #List all the tables
 
 covnames<-get.namesofcoverages(datadir)
@@ -32,6 +35,8 @@ arc<-get.arcdata(datadir,"wetlands")
 pal<-get.paldata(datadir,"wetlands")
 lab<-get.labdata(datadir,"wetlands")
 cnt<-get.cntdata(datadir,"wetlands")
+
+bnd<-get.bnddata(infodir,"WETLANDS.BND")
 
 print("Plotting all the arcs")
 plotarc(arc)
