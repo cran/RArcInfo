@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avctest.c,v 1.4 1999/05/17 16:25:44 daniel Exp $
+ * $Id: avctest.c,v 1.1.1.1 2001/06/27 20:10:56 vir Exp $
  *
  * Name:     avctest.c
  * Project:  Arc/Info Vector coverage (AVC) BIN->E00 conversion library
@@ -28,6 +28,12 @@
  **********************************************************************
  *
  * $Log: avctest.c,v $
+ * Revision 1.1.1.1  2001/06/27 20:10:56  vir
+ * Initial release (0.1) under the cvs tree at Sourceforge.
+ *
+ * Revision 1.1.1.1  2001/06/27 20:04:13  vir
+ * Initial release (0.1) under the CVS tree.
+ *
  * Revision 1.4  1999/05/17 16:25:44  daniel
  * Detect .pal (RPL) files and handle them as PAL files
  *

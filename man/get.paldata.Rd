@@ -1,43 +1,40 @@
 \name{get.paldata}
 \alias{get.paldata}
 
-\title{Imports the contents of a PAL file into R}
+\title{Function for importing the contents of a PAL file into R}
 \description{
-Reads the  contents of a polygon definitions file and imports it into R.
+This function reads and imports into R the  contents of a polygon definitions file. 
 }
 
-\usage{get.paldata(infodir, coverage, filename)}
+\usage{get.paldata(infodir, coverage, filename="pal.adf")}
 
 \arguments{
-\item{infodir}{Info directory where there is a file called arc.dat}
+\item{infodir}{Info directory where there is a file called arc.dat (usually called 'info').}
 \item{coverage}{The name of the coverage we want to work with}
 \item{filename}{The name of the file in the coverage directory that
-stores the data}
+stores the data. By default, it is called 'pal.adf'}
 }
 
 \value{
-This functions returns a list in which every item is a list with
-the next fields:
+This function returns a list with two elements. The first one is
+a data frame with the next fields (columns):
 
-\item{Polygon ID}{A number that identifies this polygon.}
+\item{PolygonID}{A number that identifies this polygon.}
+\item{MinX}{Minimum value for all the X component of the coordinates.}
+\item{MinY}{Minimum value for all the Y component of the coordinates.}
+\item{MaxX}{Maximum value for all the X component of the coordinates.}
+\item{MaxY}{Maximum value for all the Y component of the coordinates.}
+\item{NArcs}
 
-\item{Minimum Values}{
-An array with the minimum values for the X and Y coordinates
-of the nodes in the polygon boundary.
+The second element in the list is also a list in which each element is
+composed by three arrays with information about the polygons that 
+are in the polygon boundary:  'Arc ID', 'From Node' and 'Adjacent Polygon'.
 }
 
-\item{Maximum Values}{
-An array with the maximum values for the X and Y coordinates
-of the nodes in the polygon boundary.
-}
 
-\item{Number of arcs}
-
-\item{Arcs list}{
- An array with information about the polygons that are in the polygon boundary:
- Arc ID, From Node and Adjadcent Polygon.From Node and Adjadcent Polygon Id.
-}
-
+\references{
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
 }
+
+\keyword{file}
