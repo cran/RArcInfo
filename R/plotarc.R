@@ -68,7 +68,7 @@ plotarc<-function(arc, new=TRUE, index=NULL, ...)
 		par.in <- par(no.readonly = TRUE)
 #		on.exit(par(par.in))
 
-		plot.dim<-c(ymax-ymin, xmax-xmin)
+		plot.dim<-c(xmax-xmin, ymax-ymin)
 		print(min(par.in$pin)
 		                * par.in$fin / max(par.in$fin)
 				                * (plot.dim) / max(plot.dim))

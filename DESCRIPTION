@@ -1,6 +1,6 @@
 Package: RArcInfo
-Version: 0.4-2
-Date: 2002/12/03
+Version: 0.4-3
+Date: 2003/9/17
 Title: Functions to import data from Arc/Info V7.x binary coverages
 Author: Virgilio Gómez-Rubio <virgilio.gomez@uv.es>
 Maintainer: Virgilio Gómez-Rubio <virgilio.gomez@uv.es>

@@ -1,4 +1,4 @@
- RArcInfo - 0.4-2
+ RArcInfo - 0.4-3
 
 - INTRODUCTION
 
@@ -140,6 +140,11 @@ I have opened a project at www.sourceforge.net in order to keep there all
 the source code. When I have more spare time I will make a beatiful web page too...
 
 NEWS
+
+*V 0.4-3
+	- RArcInfo started to fail when compiling using gcc 3.x due to
+	the -O3 flag. Two files called Makevars and Makefile have been
+	added in order to compile thepackage with flag -O.
 
 *V 0.4-2
 	- 'index' argument added to plotarc to select the arcs to plot.

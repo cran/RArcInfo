@@ -8,7 +8,7 @@ This function reads and imports into R the  contents of a file of annotations (T
 }
 
 
-\usage{get.arcdata(datadir, coverage, filename="txt.adf")}
+\usage{get.txtdata(datadir, coverage, filename="txt.adf")}
 
 \arguments{
 \item{datadir}{Directory under which all the coverages and a directory called 'info' are.}
