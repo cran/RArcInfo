@@ -8,13 +8,16 @@ of a PAL file}
 This function works like plotarc, but we can also decide what polygons to
 plot. The arc definitions are stored in the arc variable, and the polygon 
 definitions are in the pal variable.
+}
 
-\usage{plotarc(arc, pal, new=T)}
+\usage{plotpal(arc, pal, new=T, ...)}
 
 \arguments{
 \item{arc}{The data returned by a call to get.arcdata}
 \item{pal}{The data returned by a call to get.paldata}
 \item{new}{Do you want to plot on the last window/device or on a new one?}
+\item{...}{Options to be passed to a call to the function plot when
+creating the display (i. e., window or file).}
 }
 
 \value{

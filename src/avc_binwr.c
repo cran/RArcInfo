@@ -1,4 +1,4 @@
-/* $Id: avc_binwr.c,v 1.6 1999/08/26 17:26:09 daniel Exp $
+/* $Id: avc_binwr.c,v 1.1.1.1 2001/06/27 20:10:52 vir Exp $
  *
  * Name:     avc_binwr.c
  * Project:  Arc/Info vector coverage (AVC)  E00->BIN conversion library
@@ -27,6 +27,12 @@
  **********************************************************************
  *
  * $Log: avc_binwr.c,v $
+ * Revision 1.1.1.1  2001/06/27 20:10:52  vir
+ * Initial release (0.1) under the cvs tree at Sourceforge.
+ *
+ * Revision 1.1.1.1  2001/06/27 20:04:08  vir
+ * Initial release (0.1) under the CVS tree.
+ *
  * Revision 1.6  1999/08/26 17:26:09  daniel
  * Removed printf() messages used in Windows tests
  *

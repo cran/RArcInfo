@@ -5,14 +5,17 @@
 \description{
 
 Taking as argument the list returned by the get.arcdata function,
-plots all the arcs. With the argument new the user can decide
-whether plot on a new window/device or on the last window/device.
+this function plots all the arcs. With the argument new the user can decide
+whether to plot on a new window/device or on the last window/device.
+}
 
-\usage{plotarc(arc, new=T)}
+\usage{plotarc(arc, new=T, ...)}
 
 \arguments{
 \item{arc}{The data returned by a call to get.arcdata}
 \item{new}{Do you want to plot on the last window/device or on a new one?}
+\item{...}{Options to be passed to a call to the function plot when
+creating the display (i. e., window or file).}
 }
 
 \value{

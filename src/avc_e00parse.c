@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_e00parse.c,v 1.5 1999/12/05 03:40:13 daniel Exp $
+ * $Id: avc_e00parse.c,v 1.1.1.1 2001/06/27 20:10:52 vir Exp $
  *
  * Name:     avc_e00parse.c
  * Project:  Arc/Info vector coverage (AVC)  E00->BIN conversion library
@@ -28,6 +28,12 @@
  **********************************************************************
  *
  * $Log: avc_e00parse.c,v $
+ * Revision 1.1.1.1  2001/06/27 20:10:52  vir
+ * Initial release (0.1) under the cvs tree at Sourceforge.
+ *
+ * Revision 1.1.1.1  2001/06/27 20:04:09  vir
+ * Initial release (0.1) under the CVS tree.
+ *
  * Revision 1.5  1999/12/05 03:40:13  daniel
  * Fixed signed/unsigned mismatch compile warning
  *
