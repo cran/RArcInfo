@@ -1,15 +1,13 @@
 \name{get.namesofcoverages}
 \alias{get.namesofcoverages}
 
-\title{Returns the names of the coverages}
+\title{Function for getting the names of the coverages}
 
 \description{
-Returns the name of all the files and directories under the given 
-directory. We must use this function on the directory where all the coverages
-are stored.
+This function returns the name of all the coverages under the given directory.
 }
 
-\usage{get.namesofcoveragtes(directory)}
+\usage{get.namesofcoverages(directory)}
 
 \arguments{
 \item{directory}{A character string with the name of the directory which 
@@ -21,3 +19,4 @@ A list of character strings with the names of the files and directories
 under the given one.
 }
 
+\keyword{file}

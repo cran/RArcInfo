@@ -13,6 +13,15 @@
 #endif
 
 
+#ifdef WIN32 
+#define SLASH 92 // '\'
+#else
+#define SLASH 47 // '/'
+#endif
+
+#define PATH 257 //The length of an array containing a path
+
+
 SEXP get_names_of_coverages(SEXP directory);
 SEXP get_table_names(SEXP directory);
 SEXP get_table_fields(SEXP info_dir, SEXP table_name);
@@ -22,5 +31,8 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename);
 SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename);
 SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename);
 SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename);
+SEXP get_table_data(SEXP infodir, SEXP tablename);
+SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename);
 
+void complete_path(char *path1, char *path2, int dir);
 #endif

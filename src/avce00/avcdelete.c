@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avcdelete.c,v 1.2 1999/12/05 05:28:49 daniel Exp $
+ * $Id: avcdelete.c,v 1.1.1.1 2001/06/27 20:10:56 vir Exp $
  *
  * Name:     avcdelete.c
  * Project:  Arc/Info Vector coverage (AVC) BIN<->E00 conversion library
@@ -28,6 +28,12 @@
  **********************************************************************
  *
  * $Log: avcdelete.c,v $
+ * Revision 1.1.1.1  2001/06/27 20:10:56  vir
+ * Initial release (0.1) under the cvs tree at Sourceforge.
+ *
+ * Revision 1.1.1.1  2001/06/27 20:04:13  vir
+ * Initial release (0.1) under the CVS tree.
+ *
  * Revision 1.2  1999/12/05 05:28:49  daniel
  * Updated usage info with build date
  *

@@ -1,33 +1,39 @@
 \name{get.cntdata}
 \alias{get.cntdata}
 
-\title{Imports the contents of a CNT file into R}
+\title{Function for importing the contents of a CNT file into R}
 \description{
-Reads the  contents of a polygon centroid information file and imports it 
-into R. 
+This function reads and imports into R the  contents of a polygon centroid information file.
 }
 
-\usage{get.labdata(infodir, coverage, filename)}
+\usage{get.cntdata(datadir, coverage, filename="cnt.adf")}
 
 \arguments{
-\item{infodir}{Info directory where there is a file called arc.dat}
-\item{coverage}{The name of the coverage we want to work with}
+\item{datadir}{Directory under which all the coverages and a directory called 'info' are.}
+\item{coverage}{The name of the coverage we want to work with.}
 \item{filename}{The name of the file in the coverage directory that
-stores the data}
+stores the data (usually called 'cnt.adf').}
 }
 
 \value{
-This functions returns a list in which every item is also a list with
-the next fields:
+This functions returns a list with two elements. The first one is a data frame
+with the next fields (columns):
 
-\item{Polygon ID}{The polygon itself.}
+\item{PolygonID}{The polygon itself.}
 
-\item{Coordinates}{An array with the coordinates of the centroid.}
+\item{CoordX}{An array with the X coordinates of the centroid.}
 
-\item{Number of Labels}{The number of labels this polygon has.}
+\item{CoordY}{An array with the Y coordinates of the centroid.}
 
-\item{Labels}{An array with the number of the label identifiers related to this polygon.} 
+\item{NLabels}{The number of labels this polygon has.}
 
+The second element in the list is an array with the label identifiers related
+to this polygon.
+}
+
+\references{
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
 }
+
+\keyword{file}

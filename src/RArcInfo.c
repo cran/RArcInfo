@@ -12,7 +12,8 @@ AVCBinFile *_AVCBinReadOpenTable(const char *pszInfoPath, const char *pszTableNa
 
 
 //It just reads the file and directory names under "directory"
-SEXP get_names_of_coverages(SEXP directory)
+//This code is deprecated
+/*SEXP get_names_of_coverages(SEXP directory)
 {
 	int i,n;
 	struct dirent **namelist;
@@ -41,7 +42,7 @@ SEXP get_names_of_coverages(SEXP directory)
 	UNPROTECT(1);
 	return lnames;
 }
-
+*/
 
 //It returns the table names and something more:
 //- Arc file
@@ -52,18 +53,16 @@ SEXP get_names_of_coverages(SEXP directory)
 
 SEXP get_table_names(SEXP directory)
 {
-	SEXP tables, aux;
+	SEXP *table, aux;
 	AVCRawBinFile *arcfile;
 	AVCTableDef tabledefaux;
-	char arcdir[256], *dirname;
-	int i,n;
+	char arcdir[PATH], *dirname;
+	int i,n, **idata;
 
 	dirname=CHAR(STRING_ELT(directory,0));
 	strcpy(arcdir,dirname);
-	if(dirname[strlen(dirname)-1]=='/')
-		strcat(arcdir,"arc.dir");
-	else
-		strcat(arcdir,"/arc.dir");
+
+	complete_path(arcdir,"arc.dir", 0);
 
 	if(!(arcfile=AVCRawBinOpen(arcdir,"r")))
 	{
@@ -79,55 +78,71 @@ SEXP get_table_names(SEXP directory)
 
 	AVCRawBinFSeek(arcfile, 0,SEEK_SET);
 
-	PROTECT(tables=NEW_LIST(n));
+	table=calloc(6, sizeof(SEXP));
+
+	PROTECT(table[0]=NEW_STRING(n));
+	PROTECT(table[1]=NEW_STRING(n));
+
+	idata=calloc(4, sizeof(char *));
+	PROTECT(table[2]=NEW_INTEGER(n));
+	idata[0]=INTEGER(table[2]);
+	PROTECT(table[3]=NEW_INTEGER(n));
+	idata[1]=INTEGER(table[3]);
+	PROTECT(table[4]=NEW_INTEGER(n));
+	idata[2]=INTEGER(table[4]);
+	PROTECT(table[5]=NEW_LOGICAL(n));
+	idata[3]=LOGICAL(table[2]);
+
+
 	i=0;
 	while(!AVCRawBinEOF(arcfile))
 	{
 		if(_AVCBinReadNextArcDir(arcfile, &tabledefaux))
 			break;
 
-		SET_VECTOR_ELT(tables,i,NEW_LIST(6));
-		aux=VECTOR_ELT(tables,i);
 
-		//Table name
-		SET_VECTOR_ELT(aux,0,NEW_STRING(1));
-		SET_STRING_ELT(aux,0, COPY_TO_USER_STRING(tabledefaux.szTableName));
+		SET_VECTOR_ELT(table[0],i,COPY_TO_USER_STRING(tabledefaux.szTableName));
+		SET_VECTOR_ELT(table[1],i,COPY_TO_USER_STRING(tabledefaux.szInfoFile));
 
-		SET_VECTOR_ELT(aux,1,NEW_STRING(1));
-		SET_STRING_ELT(aux,1, COPY_TO_USER_STRING(tabledefaux.szInfoFile));
-		
-		SET_VECTOR_ELT(aux,2,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,2,ScalarInteger(tabledefaux.numFields));
-
-		SET_VECTOR_ELT(aux,3,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,3,ScalarInteger(tabledefaux.nRecSize));
-
-		SET_VECTOR_ELT(aux,4,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,4,ScalarInteger(tabledefaux.numRecords));
-
-		SET_VECTOR_ELT(aux,5,NEW_LOGICAL(1));
+		idata[0][i]=tabledefaux.numFields;
+		idata[1][i]=tabledefaux.nRecSize;
+		idata[2][i]=tabledefaux.numRecords;
 		if(!strcmp(tabledefaux.szExternal,"XX"))
-			SET_VECTOR_ELT(aux,5, ScalarLogical(1));
+			idata[3][i]=1;
 		else
-			SET_VECTOR_ELT(aux,5, ScalarLogical(0));
-		
+			idata[3][i]=0;
+
 		i++;
 	}
-	UNPROTECT(1);
-	return tables;
+
+	PROTECT(aux=NEW_LIST(6));
+
+	for(i=0;i<6;i++)
+		SET_VECTOR_ELT(aux,i,table[i]);
+
+	UNPROTECT(7);
+
+	free(table);
+	free(idata);
+
+	return aux;
 }
 
 
 //It returns the fields of the table (name and type)
 SEXP get_table_fields(SEXP info_dir, SEXP table_name)
 {
-	int i;
-	SEXP data, aux;
+	int i, *idata;
+	char infodir[PATH];
+	SEXP *table, aux;
 	AVCBinFile *tablefile;
 	AVCTableDef *tabledef;
 	AVCFieldInfo *fields;
 
-tablefile=_AVCBinReadOpenTable( CHAR(STRING_ELT(info_dir,0)), CHAR(STRING_ELT(table_name,0)) );
+	strcpy(infodir,CHAR(STRING_ELT(info_dir,0)));
+	complete_path(infodir,"",1);
+
+tablefile=_AVCBinReadOpenTable( infodir, CHAR(STRING_ELT(table_name,0)) );
 
 	if(!tablefile)
 		error("The path to the info directory is invalid or the table doesn't exist");
@@ -135,49 +150,44 @@ tablefile=_AVCBinReadOpenTable( CHAR(STRING_ELT(info_dir,0)), CHAR(STRING_ELT(ta
 	tabledef=(tablefile->hdr).psTableDef;
 	fields=tabledef->pasFieldDef;
 
-	PROTECT(data=NEW_LIST(tabledef->numFields));
 
+	table=calloc(2, sizeof(SEXP));
+
+	PROTECT(table[0]=NEW_STRING(tabledef->numFields));
+	PROTECT(table[1]=NEW_INTEGER(tabledef->numFields));
+	idata=INTEGER(table[1]);
 	for(i=0;i<tabledef->numFields;i++)
 	{
-		SET_VECTOR_ELT(data,i, NEW_LIST(2));
-		aux=VECTOR_ELT(data,i);	
+		SET_VECTOR_ELT(table[0],i,COPY_TO_USER_STRING(fields[i].szName));
 
-
-		SET_VECTOR_ELT(aux,0, NEW_STRING(1));
-		SET_STRING_ELT(aux,0, COPY_TO_USER_STRING(fields[i].szName));
-
-		SET_VECTOR_ELT(aux,1, NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,1, ScalarInteger(fields[i].nType1));
+		idata[i]=fields[i].nType1;
 	}
 
-	UNPROTECT(1);
-	return data;
+	PROTECT(aux=NEW_LIST(2));
+	SET_VECTOR_ELT(aux,0,table[0]);
+	SET_VECTOR_ELT(aux,1,table[1]);
+
+	UNPROTECT(3);
+
+	free(table);
+
+	return aux;
 }
 
 //It imports the data from an arc file
 SEXP get_arc_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
-	int i,j,n;
-	double *pdata;
-	char pathtofile[257];
+	int i,j,n, **ptable;
+	double *x,*y;
+	char pathtofile[PATH];
 	AVCArc *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table, points, aux;
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 
-	if(pathtofile[strlen(pathtofile)-1]=='/')
-                strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-        else
-	{
-                strcat(pathtofile,"/");
-		strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-	}
-
-	if(pathtofile[strlen(pathtofile)-1]!='/')
-		strcat(pathtofile,"/");
-
+	complete_path(pathtofile, (char *)CHAR(STRING_ELT(coverage,0)), 1);
 
 	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileARC)))
@@ -187,8 +197,19 @@ SEXP get_arc_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextArc(file)){n++;}
 
-	printf("%d\n",n);
-	PROTECT(data=NEW_LIST(n));
+	Rprintf("Number of registers:%d\n",n);
+
+
+	table=calloc(7,sizeof(SEXP));
+	ptable=(int **)calloc(7, sizeof(int *));
+	for(i=0;i<7;i++)
+	{
+		PROTECT(table[i]=NEW_INTEGER(n));
+		ptable[i]=(int *)INTEGER(table[i]);
+	}
+
+
+	PROTECT(points=NEW_LIST(n));
 
 	if(AVCBinReadRewind(file))
 		error("Rewind");
@@ -199,47 +220,52 @@ SEXP get_arc_data(SEXP directory, SEXP coverage, SEXP filename)
 		if(!(reg=(AVCArc*)AVCBinReadNextArc(file)))
 			error("Error while reading register");
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(8));	
-		aux=VECTOR_ELT(data,i);
 
-		SET_VECTOR_ELT(aux,0,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,0,ScalarInteger(reg->nArcId));
+		ptable[0][i]=reg->nArcId;
 
-		SET_VECTOR_ELT(aux,1,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,1,ScalarInteger(reg->nUserId));
+		ptable[1][i]=reg->nUserId;
 
-		SET_VECTOR_ELT(aux,2,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,2,ScalarInteger(reg->nFNode));
+		ptable[2][i]=reg->nFNode;
 
-		SET_VECTOR_ELT(aux,3,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,3,ScalarInteger(reg->nTNode));
+		ptable[3][i]=reg->nTNode;
 
-		SET_VECTOR_ELT(aux,4,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,4,ScalarInteger(reg->nLPoly));
+		ptable[4][i]=reg->nLPoly;
 
-		SET_VECTOR_ELT(aux,5,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,5,ScalarInteger(reg->nRPoly));
+		ptable[5][i]=reg->nRPoly;
 
-		SET_VECTOR_ELT(aux,6,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,6,ScalarInteger(reg->numVertices));
+		ptable[6][i]=reg->numVertices;
 
-		SET_VECTOR_ELT(aux,7,NEW_NUMERIC(2*(reg->numVertices)));
+		SET_VECTOR_ELT(points,i,NEW_LIST(2));
 
+		aux=VECTOR_ELT(points,i);
+
+		SET_VECTOR_ELT(aux,0,NEW_NUMERIC(reg->numVertices));
+		SET_VECTOR_ELT(aux,1,NEW_NUMERIC(reg->numVertices));
+
+		x=REAL(VECTOR_ELT(aux,0));
+		y=REAL(VECTOR_ELT(aux,1));
 
 		for(j=0;j<reg->numVertices;j++)
 		{
-			pdata=REAL(VECTOR_ELT(aux,7));
-
-			pdata[2*j]=reg->pasVertices[j].x;
-			pdata[2*j+1]=reg->pasVertices[j].y;
+			x[j]=reg->pasVertices[j].x;
+			y[j]=reg->pasVertices[j].y;
 		}
 
 	}
 
-	UNPROTECT(1);
+	PROTECT(aux=NEW_LIST(8));
 
+	for(i=0;i<7;i++)
+	{
+		SET_VECTOR_ELT(aux,i,table[i]);
+	}
 
-	return data;
+	SET_VECTOR_ELT(aux,7,points);
+
+	UNPROTECT(9);
+
+	free(table);
+	return aux;
 }
 
 SEXP get_bnd_data(SEXP info_dir, SEXP tablename)
@@ -281,29 +307,21 @@ if(!(tablefile=_AVCBinReadOpenTable( CHAR(STRING_ELT(info_dir,0)), CHAR(STRING_E
 SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
 	int i,j,n;
-	int *idata;
-	double *ddata;
-	char pathtofile[257];
+	int **idata;
+	char pathtofile[PATH];
+	void **ptable;
 	AVCPal *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table, points, aux;
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 
-	if(pathtofile[strlen(pathtofile)-1]=='/')
-                strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-        else
-	{
-                strcat(pathtofile,"/");
-		strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-	}
 
-	if(pathtofile[strlen(pathtofile)-1]!='/')
-		strcat(pathtofile,"/");
+	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
+	printf("File opened:%s\n",pathtofile);
 
 
-	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFilePAL)))
 		error("Error opening file");
 
@@ -311,8 +329,29 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	while(AVCBinReadNextPal(file)){n++;}
 
-	printf("%d\n",n);
-	PROTECT(data=NEW_LIST(n));
+	Rprintf("Number of registers:%d\n",n);
+
+	idata=calloc(3,sizeof(int *));
+
+        table=calloc(6,sizeof(SEXP));
+        ptable=(void **)calloc(6, sizeof(void *));
+
+        PROTECT(table[0]=NEW_INTEGER(n));  //Polygon ID
+        ptable[0]=(int *)INTEGER(table[0]);
+        PROTECT(table[1]=NEW_NUMERIC(n));  //Min X. coordinate
+        ptable[1]=(double *)REAL(table[1]);
+        PROTECT(table[2]=NEW_NUMERIC(n));  //Min Y. coordinate
+        ptable[2]=(double *)REAL(table[2]);
+        PROTECT(table[3]=NEW_NUMERIC(n));  //Max X. coordinate
+        ptable[3]=(double *)REAL(table[3]);
+        PROTECT(table[4]=NEW_NUMERIC(n));  //Max Y. coordinate
+        ptable[4]=(double *)REAL(table[4]);
+        PROTECT(table[5]=NEW_INTEGER(n));  //Number of arcs
+        ptable[5]=(int *)INTEGER(table[5]);
+ 
+ 
+        PROTECT(points=NEW_LIST(n));  
+
 
 	if(AVCBinReadRewind(file))
 		error("Rewind");
@@ -323,41 +362,54 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename)
 		if(!(reg=(AVCPal*)AVCBinReadNextPal(file)))
 			error("Error while reading register");
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(5));	
-		aux=VECTOR_ELT(data,i);
 
-		SET_VECTOR_ELT(aux,0,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,0,ScalarInteger(reg->nPolyId));
+		((int *)ptable[0])[i]=reg->nPolyId;
 
-		SET_VECTOR_ELT(aux,1,NEW_NUMERIC(2));
-		ddata=REAL(VECTOR_ELT(aux,1));
-		ddata[0]=reg->sMin.x;
-		ddata[1]=reg->sMin.y;
+		((double *)ptable[1])[i]=reg->sMin.x;
+		((double *)ptable[2])[i]=reg->sMin.y;
 
-		SET_VECTOR_ELT(aux,2,NEW_NUMERIC(2));
-		ddata=REAL(VECTOR_ELT(aux,2));
-		ddata[0]=reg->sMax.x;
-		ddata[1]=reg->sMax.y;
+		((double *)ptable[3])[i]=reg->sMax.x;
+		((double *)ptable[4])[i]=reg->sMax.y;
 
-		SET_VECTOR_ELT(aux,3,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,3,ScalarInteger(reg->numArcs));
+		((int *)ptable[5])[i]=reg->numArcs;
 
 
-		SET_VECTOR_ELT(aux,4,NEW_INTEGER(3*(reg->numArcs)));
+		SET_VECTOR_ELT(points,i,NEW_LIST(3));
+		aux=VECTOR_ELT(points,i);
+
+		SET_VECTOR_ELT(aux,0,NEW_INTEGER(reg->numArcs));
+		idata[0]=INTEGER(VECTOR_ELT(aux,0));
+		SET_VECTOR_ELT(aux,1,NEW_INTEGER(reg->numArcs));
+		idata[1]=INTEGER(VECTOR_ELT(aux,1));
+		SET_VECTOR_ELT(aux,2,NEW_INTEGER(reg->numArcs));
+		idata[2]=INTEGER(VECTOR_ELT(aux,2));
+
 		for(j=0;j<reg->numArcs;j++)
 		{
-			idata=INTEGER(VECTOR_ELT(aux,4));
-
-			idata[3*j]=reg->pasArcs[j].nArcId;
-			idata[3*j+1]=reg->pasArcs[j].nFNode;
-			idata[3*j+2]=reg->pasArcs[j].nAdjPoly;
+			idata[0][j]=reg->pasArcs[j].nArcId;
+			idata[1][j]=reg->pasArcs[j].nFNode;
+			idata[2][j]=reg->pasArcs[j].nAdjPoly;
 		}
 
 	}
 
-	UNPROTECT(1);
 
-	return data;
+        PROTECT(aux=NEW_LIST(7));
+ 
+        for(i=0;i<6;i++)
+        {
+                SET_VECTOR_ELT(aux,i,table[i]);
+        }
+ 
+        SET_VECTOR_ELT(aux,6,points);
+ 
+        UNPROTECT(8);  
+
+
+	free(ptable);
+	free(idata);
+
+	return aux;
 }
 
 
@@ -365,26 +417,16 @@ SEXP get_pal_data(SEXP directory, SEXP coverage, SEXP filename)
 SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
 	int i,n;
-	double *ddata;
-	char pathtofile[257];
+	void **pdata;
+	char pathtofile[PATH];
 	AVCLab *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table,aux;
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 
-	if(pathtofile[strlen(pathtofile)-1]=='/')
-                strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-        else
-	{
-                strcat(pathtofile,"/");
-		strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-	}
-
-	if(pathtofile[strlen(pathtofile)-1]!='/')
-		strcat(pathtofile,"/");
-
+	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)),1);
 
 	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileLAB)))
@@ -395,68 +437,73 @@ SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename)
 	while(AVCBinReadNextLab(file)){n++;}
 
 	printf("%d\n",n);
-	PROTECT(data=NEW_LIST(n));
+
+
+	table=calloc(8, sizeof(SEXP));
+	pdata=calloc(8, sizeof(void *));
+
+	PROTECT(table[0]=NEW_INTEGER(n));
+	pdata[0]=INTEGER(table[0]);
+	PROTECT(table[1]=NEW_INTEGER(n));
+	pdata[1]=INTEGER(table[1]);
+
+	for(i=2;i<8;i++)
+	{
+		PROTECT(table[i]=NEW_NUMERIC(n));
+		pdata[i]=REAL(table[i]);
+
+	}
 
 	if(AVCBinReadRewind(file))
 		error("Rewind");
 
 	for(i=0;i<n;i++)
 	{
-		
 		if(!(reg=(AVCLab*)AVCBinReadNextLab(file)))
 			error("Error while reading register");
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(3));	
-		aux=VECTOR_ELT(data,i);
 
-		SET_VECTOR_ELT(aux,0,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,0,ScalarInteger(reg->nValue));
+		((int *)pdata[0])[i]=reg->nValue;
+		((int *)pdata[1])[i]=reg->nPolyId;
 
-		SET_VECTOR_ELT(aux,1,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,1,ScalarInteger(reg->nPolyId));
-
-		SET_VECTOR_ELT(aux,2,NEW_NUMERIC(6));
-		ddata=REAL(VECTOR_ELT(aux,2));
-
-		ddata[0]=reg->sCoord1.x;
-		ddata[1]=reg->sCoord1.y;
-		ddata[2]=reg->sCoord2.x;
-		ddata[3]=reg->sCoord2.y;
-		ddata[4]=reg->sCoord3.x;
-		ddata[5]=reg->sCoord3.y;
+		((double*)pdata[2])[i]=reg->sCoord1.x;
+		((double*)pdata[3])[i]=reg->sCoord1.y;
+		((double*)pdata[4])[i]=reg->sCoord2.x;
+		((double*)pdata[5])[i]=reg->sCoord2.y;
+		((double*)pdata[6])[i]=reg->sCoord3.x;
+		((double*)pdata[7])[i]=reg->sCoord3.y;
 		
-
 	}
 
-	UNPROTECT(1);
 
-	return data;
+	PROTECT(aux=NEW_LIST(8));
+
+	for(i=0;i<8;i++)
+	{
+		SET_VECTOR_ELT(aux,i,table[i]);
+	}
+
+	UNPROTECT(9);
+
+	free(table);
+	free(pdata);
+
+	return aux;
 }
 
 
 SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
-	int i,j,n, *idata;
-	double *ddata;
-	char pathtofile[257];
+	int i,j,n, *ilabel;
+	void **pdata;
+	char pathtofile[PATH];
 	AVCCnt *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table, label, aux;
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
-
-	if(pathtofile[strlen(pathtofile)-1]=='/')
-                strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-        else
-	{
-                strcat(pathtofile,"/");
-		strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-	}
-
-	if(pathtofile[strlen(pathtofile)-1]!='/')
-		strcat(pathtofile,"/");
-
+	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)),1);
 
 	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileCNT)))
@@ -467,7 +514,23 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 	while(AVCBinReadNextCnt(file)){n++;}
 
 	printf("%d\n",n);
-	PROTECT(data=NEW_LIST(n));
+
+	table=calloc(4, sizeof(SEXP));
+	pdata=calloc(4,sizeof(void *));
+
+	PROTECT(table[0]=NEW_INTEGER(n));
+	pdata[0]=INTEGER(table[0]);
+
+	PROTECT(table[1]=NEW_NUMERIC(n));
+	pdata[1]=REAL(table[1]);
+
+	PROTECT(table[2]=NEW_NUMERIC(n));
+	pdata[2]=REAL(table[2]);
+
+	PROTECT(table[3]=NEW_INTEGER(n));
+	pdata[3]=INTEGER(table[3]);
+
+	PROTECT(label=NEW_LIST(n));
 
 	if(AVCBinReadRewind(file))
 		error("Rewind");
@@ -478,37 +541,40 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 		if(!(reg=(AVCCnt*)AVCBinReadNextCnt(file)))
 			error("Error while reading register");
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(4));	
-		aux=VECTOR_ELT(data,i);
+		((int *)pdata[0])[i]=reg->nPolyId;
 
-		SET_VECTOR_ELT(aux,0,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,0,ScalarInteger(reg->nPolyId));
+		((double *)pdata[1])[i]=reg->sCoord.x;
+		((double *)pdata[2])[i]=reg->sCoord.y;
 
-		SET_VECTOR_ELT(aux,1,NEW_NUMERIC(2));
-		ddata=REAL(VECTOR_ELT(aux,1));
-		ddata[0]=reg->sCoord.x;
-		ddata[1]=reg->sCoord.y;
+		((int *)pdata[3])[i]=reg->numLabels;
 
-		SET_VECTOR_ELT(aux,2,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,2,ScalarInteger(reg->numLabels));
-
+		SET_VECTOR_ELT(label,i,NEW_INTEGER(reg->numLabels));
+		ilabel=INTEGER(VECTOR_ELT(label,i));
 		if(reg->numLabels >0)
 		{
-			SET_VECTOR_ELT(aux,3,NEW_INTEGER(reg->numLabels));
-			idata=INTEGER(VECTOR_ELT(aux,3));
-
 			for(j=0;j<reg->numLabels;j++)
 			{
-				printf("%d\n", reg->panLabelIds[j]);
-				idata[j]=reg->panLabelIds[j];
+//				printf("%d\n", reg->panLabelIds[j]);
+				ilabel[j]=reg->panLabelIds[j];
 			}
 		}
 
 	}
 
-	UNPROTECT(1);
 
-	return data;
+	PROTECT(aux=NEW_LIST(5));
+
+	for(i=0;i<4;i++)
+		SET_VECTOR_ELT(aux, i, table[i]);
+
+	SET_VECTOR_ELT(aux, 4, label);
+
+	UNPROTECT(6);
+
+	free(table);
+	free(pdata);
+
+	return aux;
 }
 
 
@@ -516,25 +582,15 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
 	int i,n;
-	char pathtofile[257];
+	void **pdata;
+	char pathtofile[PATH];
 	AVCTol *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table, aux;
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
-
-	if(pathtofile[strlen(pathtofile)-1]=='/')
-                strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-        else
-	{
-                strcat(pathtofile,"/");
-		strcat(pathtofile,CHAR(STRING_ELT(coverage,0)));
-	}
-
-	if(pathtofile[strlen(pathtofile)-1]!='/')
-		strcat(pathtofile,"/");
-
+	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
 
 	printf("%s\n",pathtofile);
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileCNT)))
@@ -545,52 +601,153 @@ SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename)
 	while(AVCBinReadNextTol(file)){n++;}
 
 	printf("%d\n",n);
-	PROTECT(data=NEW_LIST(n));
+
+
+	table=calloc(3, sizeof(SEXP));
+	pdata=calloc(3, sizeof(void *));
+
+	PROTECT(table[0]=NEW_INTEGER(n));
+	pdata[0]=INTEGER(table[0]);
+	PROTECT(table[1]=NEW_INTEGER(n));
+	pdata[1]=INTEGER(table[1]);
+	PROTECT(table[2]=NEW_NUMERIC(n));
+	pdata[2]=REAL(table[2]);
 
 	if(AVCBinReadRewind(file))
 		error("Rewind");
 
 	for(i=0;i<n;i++)
 	{
-		
+		printf("%d\n",i);
 		if(!(reg=(AVCTol*)AVCBinReadNextTol(file)))
 			error("Error while reading register");
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(3));	
-		aux=VECTOR_ELT(data,i);
+		((int *)pdata[0])[i]=reg->nIndex;
 
-		SET_VECTOR_ELT(aux,0,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,0,ScalarInteger(reg->nIndex));
+		((int *)pdata[1])[i]=reg->nFlag;
 
-		SET_VECTOR_ELT(aux,1,NEW_INTEGER(1));
-		SET_VECTOR_ELT(aux,1,ScalarInteger(reg->nFlag));
-
-		SET_VECTOR_ELT(aux,2,NEW_NUMERIC(1));
-		SET_VECTOR_ELT(aux,2,ScalarReal(reg->dValue));
-
-
+		((double *)pdata[2])[i]=reg->dValue;
 	}
 
-	UNPROTECT(1);
+	PROTECT(aux=NEW_LIST(3));
+	for(i=0;i<3;i++)
+		SET_VECTOR_ELT(aux, i, table[i]);
 
-	return data;
+	UNPROTECT(4);
+
+	free(table);
+	free(pdata);
+
+	return aux;
 }
 
 
 
-SEXP get_table_data(SEXP infodir, SEXP coverage, SEXP tablename) 
+SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename) 
 {
 	int i,j,n;
-	char pathtoinfodir[257];
+	int **idata;
+	double *x, *y;
+	char pathtofile[PATH];
+	AVCTxt *reg;
+	AVCBinFile *file;
+	SEXP *table, points,aux;
+
+
+	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
+	complete_path(pathtofile, CHAR(STRING_ELT(coverage,0)), 1);
+
+	printf("%s\n",pathtofile);
+	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileTXT)))
+		error("Error opening file");
+
+	n=0;
+
+	while(AVCBinReadNextTxt(file)){n++;}
+
+	printf("%d\n",n);
+
+
+	table=calloc(6, sizeof(SEXP));
+	idata=calloc(5, sizeof(int *));
+
+
+	PROTECT(table[0]=NEW_INTEGER(n));//nTxtId
+	idata[0]=INTEGER(table[0]);
+	PROTECT(table[1]=NEW_INTEGER(n));//nUserId
+	idata[1]=INTEGER(table[1]);
+	PROTECT(table[2]=NEW_INTEGER(n));//nLevel
+	idata[2]=INTEGER(table[2]);
+	PROTECT(table[3]=NEW_INTEGER(n));//numVerticesLine
+	idata[3]=INTEGER(table[3]);
+	PROTECT(table[4]=NEW_INTEGER(n));//numVerticesArrow
+	idata[4]=INTEGER(table[4]);
+
+	PROTECT(table[5]=NEW_STRING(n));//Character strings
+
+
+	PROTECT(points=NEW_LIST(n));
+
+	if(AVCBinReadRewind(file))
+		error("Rewind");
+
+	for(i=0;i<n;i++)
+	{
+		if(!(reg=(AVCTxt*)AVCBinReadNextTxt(file)))
+			error("Error while reading register");
+
+		((int *)idata[0])[i]=reg->nTxtId;
+		((int *)idata[1])[i]=reg->nUserId;
+		((int *)idata[2])[i]=reg->nLevel;
+		((int *)idata[3])[i]=reg->numVerticesLine;
+		((int *)idata[4])[i]=reg->numVerticesArrow;
+
+		SET_STRING_ELT(table[5],i, COPY_TO_USER_STRING(reg->pszText));
+
+		SET_VECTOR_ELT(points, i, NEW_LIST(2));
+		aux=VECTOR_ELT(points, i);
+
+//This can be improved storing only the right numnber of vertices
+		SET_VECTOR_ELT(aux, 0, NEW_NUMERIC(4));
+		x=REAL(VECTOR_ELT(aux,0));
+		SET_VECTOR_ELT(aux, 1, NEW_NUMERIC(4));
+		y=REAL(VECTOR_ELT(aux,1));
+
+		for(j=0;j<4;j++)
+		{
+			x[j]=reg->pasVertices[j].x;
+			y[j]=reg->pasVertices[j].y;
+		}
+
+	}
+
+	PROTECT(aux=NEW_LIST(7));
+
+	for(i=0;i<6;i++)
+		SET_VECTOR_ELT(aux, i, table[i]);
+
+	SET_VECTOR_ELT(aux, i, points);
+
+	UNPROTECT(8);
+
+	free(table);
+	free(idata);
+
+	return aux;
+}
+
+SEXP get_table_data(SEXP infodir, SEXP tablename) 
+{
+	int i,j,n;
+	char pathtoinfodir[PATH];
+	void **pdata;
 	AVCTableDef *tabledef;
 	AVCField *reg;
 	AVCBinFile *file;
-	SEXP data,aux;
+	SEXP *table,aux;
 
 	strcpy(pathtoinfodir, CHAR(STRING_ELT(infodir,0)));
-
-	if(pathtoinfodir[strlen(pathtoinfodir)-1]!='/')
-		strcat(pathtoinfodir,"/");
+	complete_path(pathtoinfodir, "", 1);
 
 	if(!(file=AVCBinReadOpen(pathtoinfodir,CHAR(STRING_ELT(tablename,0)),AVCFileTABLE)))
 	{
@@ -603,54 +760,106 @@ SEXP get_table_data(SEXP infodir, SEXP coverage, SEXP tablename)
 
 	AVCBinReadRewind(file);
 
-	PROTECT(data=NEW_LIST(n));
+
 	tabledef=(file->hdr).psTableDef;
+
+	table=calloc(tabledef->numFields, sizeof(SEXP));
+	pdata=calloc(tabledef->numFields, sizeof(void *));
+
+
+	for(i=0;i<tabledef->numFields;i++)
+        {
+//printf("%d %d %d\n",i,j,tabledef->pasFieldDef[j].nType1);
+		switch(tabledef->pasFieldDef[i].nType1)
+		{
+			case 1:
+			case 2: PROTECT(table[i]=NEW_STRING(n));break;
+
+			case 3: PROTECT(table[i]=NEW_INTEGER(n));
+				pdata[i]=(int *)INTEGER(table[i]);break;
+
+			case 4: PROTECT(table[i]=NEW_NUMERIC(n));
+				pdata[i]=(double *)REAL(table[i]);break;
+                                
+			case 5: PROTECT(table[i]=NEW_INTEGER(n));
+				pdata[i]=(int *)INTEGER(table[i]);break;
+
+			case 6: PROTECT(table[i]=NEW_NUMERIC(n));
+				pdata[i]=(double *)REAL(table[i]);break;
+		}
+	}		
+
 
 	for(i=0;i<n;i++)
 	{
 		reg=AVCBinReadNextTableRec(file);
 
-		SET_VECTOR_ELT(data,i,NEW_LIST(tabledef->numFields));
-		aux=VECTOR_ELT(data,i);
-
 		for(j=0;j<tabledef->numFields;j++)
 		{
-			printf("%d %d %d\n",i,j,tabledef->pasFieldDef[j].nType1);
+//			printf("%d %d %d\n",i,j,tabledef->pasFieldDef[j].nType1);
 			switch(tabledef->pasFieldDef[j].nType1)
 			{
 				case 1: 
 				case 2:
-				SET_VECTOR_ELT(aux,j, NEW_STRING(1)); 
-	SET_STRING_ELT(aux,j, COPY_TO_USER_STRING(reg[j].pszStr)); 
+	SET_STRING_ELT(table[j],i, COPY_TO_USER_STRING(reg[j].pszStr)); 
 				break;
 
 				case 3:
-				SET_VECTOR_ELT(aux,j, NEW_INTEGER(1)); 
-SET_STRING_ELT(aux,j,ScalarInteger(atoi(reg[j].pszStr)));
+				((int *)pdata[j])[i]=atoi(reg[j].pszStr);
 				break;
 
 				case 4:
-				SET_VECTOR_ELT(aux,j, NEW_NUMERIC(1)); 
-SET_STRING_ELT(aux,j,ScalarReal(atof(reg[j].pszStr)));
+				((double *)pdata[j])[i]=atof(reg[j].pszStr);
 				break;
 
 				case 5:
-				SET_VECTOR_ELT(aux,j, NEW_INTEGER(1)); 
-				SET_VECTOR_ELT(aux,j, ScalarInteger(reg[j].nInt32)); 
+				((int *)pdata[j])[i]=reg[j].nInt32;
 				break;
 				
 				case 6:
-				SET_VECTOR_ELT(aux,j, NEW_NUMERIC(1)); 
-
-
-				SET_VECTOR_ELT(aux,j, ScalarReal(reg[j].dDouble)); 
+				((double *)pdata[j])[i]=reg[j].dDouble;
 				break;
 			}
-
-
 		}
 	}
 
-	UNPROTECT(1);
-	return data;
+	PROTECT(aux=NEW_LIST(tabledef->numFields));
+
+	for(i=0;i<tabledef->numFields;i++)
+		SET_VECTOR_ELT(aux, i, table[i]);
+
+	UNPROTECT(1+tabledef->numFields);
+
+	free(table);
+	free(pdata);
+
+	return aux;
+}
+
+
+//Just returns a string(path1)  joining the two path, adding a slash ('/' or '\') between
+//path1 and path2
+//If path2 is a directory dir must be set to non-zero, but, if it is a file
+//dir must be zero.
+void complete_path(char *path1, char *path2, int dir)
+{
+	int l;
+
+	l=strlen(path1);
+        if(path1[l-1]!=SLASH)
+        {
+		path1[l]=SLASH;
+		path1[l+1]='\0';
+        }
+        strcat(path1,path2);
+        l=strlen(path1);
+ 
+        if(dir && path1[l-1]!=SLASH)
+	{
+                path1[l]=SLASH;
+		path1[l+1]='\0';
+		l++;
+	}
+
+	path1[l]='\0';
 }
