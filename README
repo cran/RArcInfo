@@ -1,4 +1,4 @@
- RArcInfo - 0.4
+ RArcInfo - 0.4-1
 
 - INTRODUCTION
 
@@ -141,6 +141,9 @@ the source code. When I have more spare time I will make a beatiful web page too
 
 NEWS
 
+*V 0.4-1- 'thinlines' modified to keep the last point of the arcs. Thanks
+	to Erich Neuwirth for this comment.
+
 *V 0.4	- Two new functions added to convert from/to ArcInfo binary
 	coverages to/from E00 files: 'e00toavc' and 'avctoe00'.
 	- 'read.coverage' now reads the polygon definiton file is
@@ -155,7 +158,7 @@ NEWS
 	- The plots are scaled according to the real proportions of
 	the map.
 	- Added a configure script in order to proper compile under several
-	platforms. UPDATE: No longer need because endianness is tested
+	platforms. UPDATE: No longer needed because endianness is tested
 	and set in the C sources.
 	- Added the function read.coverage to retrieve whole informtation
 	- Fixed a bug in plotpoly. If the first polygon Id is 0, then

@@ -9,7 +9,7 @@ thinl<-function(coord, tol)
 	index<-c(1)
 	j<-1
 	
-	for(i in 2:npoints)
+	for(i in 2:(npoints-1))
 	{
 		xx<-x[j]-x[i]
 		yy<-y[j]-y[i]
@@ -21,7 +21,7 @@ thinl<-function(coord, tol)
 
 	}
 
-	
+	index<-c(index,npoints) #Suggested by Erich Neuwirth	
 
 	list(x[index], y[index])
 }
