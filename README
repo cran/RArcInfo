@@ -1,0 +1,95 @@
+ RINFO - 0.01    >>>>> ALPHA SOFTWARE!!! <<<<<
+
+ This package enbales R to import data from Arc/Info  V7.x binary
+coverages. It uses the wonderful functions written by 
+Daniel Morissette <damno@videotron.ca> to import/export data
+from binary coverages from/to E00 ascii files.
+Please, notice that all the code under the RInfo/avce00 is
+copyright of Daniel Morissette, who is the writter.
+I didn't write any code inside this directory.
+
+ Basically, there is a function to import each type of file (ARC, LAB, etc.).
+Please, notice that RInfo is a work in progress.
+
+ Nowadays, the list of functions RInfo provides is:
+
+-get.namesofcoverages(dir)
+
+  Provided the name of the directory where the coverage (dir) is,  it returns
+the names of all the coverages... Well, it really returns all the file and directory
+names in the directory 'dir'.
+
+- get.tablenames(dir)
+  
+  Returns all the table names plus some aditional data, like the number of 
+records. More information about this can be found in the help. 
+
+- get.tablefields(infodir, tablename)
+
+ Returns the name of the fields of the given table.
+
+- get.XXXdata(directory, coverage, filename)
+
+  Returns the data of the given filename into a R list. XXX can be:
+
+   arc, bnd, pal, lab, cnt, tol
+
+- get.tabledata(infodir, coverage, tablename)
+
+
+There also also another two functions to plot arcs:
+
+-plotarc(arc, new=T)
+
+ This plot all the arcs returned by get.arcdata. If we want
+to rebuild the limits in the axis we should set new=T. In other case 
+we should set new=F. This is useful when you want to draw some coverages.
+
+plotpal(arc,pal, new=T)
+
+ Now we only plot the arcs defined by pal (returned from a call to 
+get.pladata).
+
+*EXAMPLE
+
+Let us suppose we have all the data (in format Arc/Info V7.x) under the directory
+/usr/gis/data. We'll have a directory called "info", where some files with information
+about all the coverages is stored. We have two coverages called "Lakes" and "Rivers"
+under the directories "lakes" and "rivers".
+
+/usr/gis/data-/
+              |
+	      |
+	    |-----|------|
+	   info  lakes rivers
+
+To import the arcs from the lakes coverage we can write and store them in a variable
+called arclakes, we can write:
+
+arclakes<-get.arcdata("/usr/gis/data/","lakes","arc.adf")
+
+Notice the final slash in the first argument and the name of the file where the data
+are stored. This is the more common name, but it may change.
+
+To import the polygons  we write:
+
+pallakes<-get.arcdata("/usr/gis/data/","lakes","pal.adf")
+
+To plot all the lakes:
+
+plotpal(arclakes, pallakes)
+
+To plot only the first and second lake:
+
+plotpal(arclakes, pallakes[[1]])
+
+* TODO
+
+- Improve the documentation quality.
+- Improve the plot funtions
+- Write functions to perform searches in tables.
+- Add the URL
+
+Please, I would like to hear suggestions from the users in order to improve this package.
+
+ Virgilio Gómez-Rubio
