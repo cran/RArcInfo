@@ -1,3 +1,4 @@
+RArcInfo                RArcInfo
 avctoe00                Converts a ARC/INFO binary coverage into an
                         ESRI E00 file
 e00toavc                Converts an ESRI E00 file into an Arc/Info V
@@ -30,7 +31,6 @@ plotarc                 Plots the data imported from an ARC file
 plotpal                 Plots the data imported from an ARC file
                         according to the contents of a PAL file
 plotpoly                Plots polygons defined by the coverages.
-RArcInfo                RArcInfo
 read.coverage           Function for retrieving basic data from a
                         given coverage
 thinlines               Function for deleting points in an arc

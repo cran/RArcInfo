@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_rawbin.c,v 1.1.1.1 2001/06/27 20:10:56 vir Exp $
+ * $Id: avc_rawbin.c,v 1.2 2005/02/17 13:03:40 vir Exp $
  *
  * Name:     avc_rawbin.c
  * Project:  Arc/Info vector coverage (AVC)  BIN->E00 conversion library
@@ -28,6 +28,11 @@
  **********************************************************************
  *
  * $Log: avc_rawbin.c,v $
+ * Revision 1.2  2005/02/17 13:03:40  vir
+ * Fixed a bug that wrongly converted E00 files into binary coverages when
+ * optimization was used. It also procuded a few warnings, that do not appear
+ * any more.
+ *
  * Revision 1.1.1.1  2001/06/27 20:10:56  vir
  * Initial release (0.1) under the cvs tree at Sourceforge.
  *
@@ -323,7 +328,7 @@ GBool AVCRawBinEOF(AVCRawBinFile *psFile)
          * the EOF error message from AVCRawBinReadBytes().
          */
         bDisableReadBytesEOFError = TRUE;
-        AVCRawBinReadBytes(psFile, 1, &c);
+        AVCRawBinReadBytes(psFile, 1, (GByte *) (&c) );
         bDisableReadBytesEOFError = FALSE;
 
         if (psFile->nCurPos > 0)
@@ -372,12 +377,23 @@ GInt32  AVCRawBinReadInt32(AVCRawBinFile *psFile)
 float   AVCRawBinReadFloat(AVCRawBinFile *psFile)
 {
     float fValue;
+    GUInt32 foo;
 
     AVCRawBinReadBytes(psFile, 4, (GByte*)(&fValue));
 
+/*
 #ifdef CPL_LSB
     *(GUInt32*)(&fValue) = CPL_SWAP32(*(GUInt32*)(&fValue));
 #endif
+*/
+
+#ifdef CPL_LSB
+    memcpy(&foo, &fValue, sizeof(fValue));
+    *(&foo) = CPL_SWAP32(*(&foo));
+    memcpy(&fValue, &foo, sizeof(fValue));
+#endif
+
+    
     return fValue;
 }
 
@@ -461,8 +477,17 @@ void  AVCRawBinWriteInt32(AVCRawBinFile *psFile, GInt32 n32Value)
 
 void  AVCRawBinWriteFloat(AVCRawBinFile *psFile, float fValue)
 {
+	GUInt32 foo;
+/*
 #ifdef CPL_LSB
     *(GUInt32*)(&fValue) = CPL_SWAP32(*(GUInt32*)(&fValue));
+#endif
+*/
+
+#ifdef CPL_LSB
+    memcpy(&foo, &fValue, sizeof(fValue));
+    *(&foo) = CPL_SWAP32(*(&foo));
+    memcpy(&fValue, &foo, sizeof(fValue));
 #endif
 
     AVCRawBinWriteBytes(psFile, 4, (GByte*)&fValue);

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: avc_bin.c,v 1.1.1.1 2001/06/27 20:10:51 vir Exp $
+ * $Id: avc_bin.c,v 1.2 2005/02/17 13:03:40 vir Exp $
  *
  * Name:     avc_bin.c
  * Project:  Arc/Info vector coverage (AVC)  BIN->E00 conversion library
@@ -28,10 +28,15 @@
  **********************************************************************
  *
  * $Log: avc_bin.c,v $
- * Revision 1.1.1.1  2001/06/27 20:10:51  vir
+ * Revision 1.2  2005/02/17 13:03:40  vir
+ * Fixed a bug that wrongly converted E00 files into binary coverages when
+ * optimization was used. It also procuded a few warnings, that do not appear
+ * any more.
+ *
+ * Revision 1.1.1.1  2001/06/27 20:10:54  vir
  * Initial release (0.1) under the cvs tree at Sourceforge.
  *
- * Revision 1.1.1.1  2001/06/27 20:04:08  vir
+ * Revision 1.1.1.1  2001/06/27 20:04:11  vir
  * Initial release (0.1) under the CVS tree.
  *
  * Revision 1.6  1999/08/23 18:17:16  daniel
@@ -936,7 +941,7 @@ int _AVCBinReadNextTxt(AVCRawBinFile *psFile, AVCTxt *psTxt,
                                            (numCharsToRead+1)*sizeof(char));
     }
 
-    AVCRawBinReadBytes(psFile, numCharsToRead, psTxt->pszText);
+    AVCRawBinReadBytes(psFile, numCharsToRead, (GByte *)(psTxt->pszText) );
     psTxt->pszText[psTxt->numChars] = '\0';
 
     /* Realloc the vertices array only if it needs to grow...
@@ -1062,7 +1067,7 @@ int _AVCBinReadNextArcDir(AVCRawBinFile *psFile, AVCTableDef *psArcDir)
 {
     /* Arc/Info Table name 
      */
-    AVCRawBinReadBytes(psFile, 32, psArcDir->szTableName);
+    AVCRawBinReadBytes(psFile, 32, (GByte *)(psArcDir->szTableName) );
     psArcDir->szTableName[32] = '\0';
 
     if (AVCRawBinEOF(psFile))
@@ -1070,7 +1075,7 @@ int _AVCBinReadNextArcDir(AVCRawBinFile *psFile, AVCTableDef *psArcDir)
 
     /* "ARC####" basename for .DAT and .NIT files
      */
-    AVCRawBinReadBytes(psFile, 8, psArcDir->szInfoFile);
+    AVCRawBinReadBytes(psFile, 8, (GByte *)(psArcDir->szInfoFile) );
     psArcDir->szInfoFile[7] = '\0';
 
     psArcDir->numFields = AVCRawBinReadInt16(psFile);
@@ -1082,7 +1087,7 @@ int _AVCBinReadNextArcDir(AVCRawBinFile *psFile, AVCTableDef *psArcDir)
 
     AVCRawBinFSeek(psFile, 10, SEEK_CUR);     /* Skip 10 bytes */
     
-    AVCRawBinReadBytes(psFile, 2, psArcDir->szExternal);
+    AVCRawBinReadBytes(psFile, 2, (GByte *) (psArcDir->szExternal) );
     psArcDir->szExternal[2] = '\0';
 
     AVCRawBinFSeek(psFile, 300, SEEK_CUR);  /* Skip the remaining 300 bytes */
@@ -1105,7 +1110,7 @@ int _AVCBinReadNextArcDir(AVCRawBinFile *psFile, AVCTableDef *psArcDir)
  **********************************************************************/
 int _AVCBinReadNextArcNit(AVCRawBinFile *psFile, AVCFieldInfo *psField)
 {
-    AVCRawBinReadBytes(psFile, 16, psField->szName);
+    AVCRawBinReadBytes(psFile, 16, (GByte *)(psField->szName) );
     psField->szName[16] = '\0';
 
     if (AVCRawBinEOF(psFile))
@@ -1125,7 +1130,7 @@ int _AVCBinReadNextArcNit(AVCRawBinFile *psFile, AVCFieldInfo *psField)
     psField->v12       = AVCRawBinReadInt16(psFile);  /* Always -1 ? */
     psField->v13       = AVCRawBinReadInt16(psFile);  /* Always -1 ? */
 
-    AVCRawBinReadBytes(psFile, 16, psField->szAltName);   /* Always Blank ? */
+    AVCRawBinReadBytes(psFile, 16, (GByte *) (psField->szAltName) );   /* Always Blank ? */
     psField->szAltName[16] = '\0';
 
     AVCRawBinFSeek(psFile, 56, SEEK_CUR);             /* Skip 56 bytes */
@@ -1288,7 +1293,7 @@ AVCBinFile *_AVCBinReadOpenTable(const char *pszInfoPath,
         {
             /* Read the relative file path, and remove trailing spaces.
              */
-            AVCRawBinReadBytes(hFile, 80, sTableDef.szDataFile);
+            AVCRawBinReadBytes(hFile, 80, (GByte *) (sTableDef.szDataFile) );
             sTableDef.szDataFile[80] = '\0';
 
             for(i = strlen(sTableDef.szDataFile)-1;
@@ -1498,7 +1503,7 @@ int _AVCBinReadNextTableRec(AVCRawBinFile *psFile, int nFields,
             /*---------------------------------------------------------
              * Values stored as strings
              *--------------------------------------------------------*/
-            AVCRawBinReadBytes(psFile, pasDef[i].nSize, pasFields[i].pszStr);
+            AVCRawBinReadBytes(psFile, pasDef[i].nSize, (GByte *) (pasFields[i].pszStr) );
             pasFields[i].pszStr[pasDef[i].nSize] = '\0';
         }
         else if (nType == AVC_FT_BININT && pasDef[i].nSize == 4)

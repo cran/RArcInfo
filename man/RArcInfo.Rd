@@ -105,6 +105,9 @@ More information about this kind of data can be found at
 }
 
 \examples{
+
+#See example(plotpoly) for another example
+
 library(RArcInfo)
 
 datadir<-system.file("exampleData",package="RArcInfo")
