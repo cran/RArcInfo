@@ -59,7 +59,7 @@ SEXP get_table_names(SEXP directory)
 	PROTECT(table[4]=NEW_INTEGER(n));
 	idata[2]=INTEGER(table[4]);
 	PROTECT(table[5]=NEW_LOGICAL(n));
-	idata[3]=LOGICAL(table[2]);
+	idata[3]=LOGICAL(table[5]);
 
 
 	i=0;
@@ -69,8 +69,8 @@ SEXP get_table_names(SEXP directory)
 			break;
 
 
-		SET_VECTOR_ELT(table[0],i,COPY_TO_USER_STRING(tabledefaux.szTableName));
-		SET_VECTOR_ELT(table[1],i,COPY_TO_USER_STRING(tabledefaux.szInfoFile));
+		SET_STRING_ELT(table[0],i,COPY_TO_USER_STRING(tabledefaux.szTableName));
+		SET_STRING_ELT(table[1],i,COPY_TO_USER_STRING(tabledefaux.szInfoFile));
 
 		idata[0][i]=tabledefaux.numFields;
 		idata[1][i]=tabledefaux.nRecSize;
@@ -126,7 +126,7 @@ tablefile=_AVCBinReadOpenTable( infodir, CHAR(STRING_ELT(table_name,0)) );
 	idata=INTEGER(table[1]);
 	for(i=0;i<tabledef->numFields;i++)
 	{
-		SET_VECTOR_ELT(table[0],i,COPY_TO_USER_STRING(fields[i].szName));
+		SET_STRING_ELT(table[0],i,COPY_TO_USER_STRING(fields[i].szName));
 
 		idata[i]=fields[i].nType1;
 	}

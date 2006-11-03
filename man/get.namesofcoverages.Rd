@@ -14,7 +14,7 @@ This function returns the name of all the coverages under the given directory.
 contains the coverages.}
 }
 
-\values{
+\value{
 A list of character strings with the names of the files and directories
 under the given one.
 }

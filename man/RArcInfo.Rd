@@ -100,6 +100,9 @@ get.namesofcoverages, read.coverage, thinlines, get.nb }
 
 
 \references{
+V. Gómez-Rubio and A. López-Quílez (2005). RArcInfo: Using GIS data
+  with R. Computers & Geosciences 3(8), 1000-1006.
+
 More information about this kind of data can be found at
 \url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
 }
