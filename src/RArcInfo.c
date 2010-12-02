@@ -27,7 +27,7 @@ SEXP get_table_names(SEXP directory)
 	char arcdir[PATH], *dirname;
 	int i,n, **idata;
 
-	dirname= (char *) CHAR(STRING_ELT(directory,0));/*FIXME*/
+	dirname=(char *) CHAR(STRING_ELT(directory,0));
 	strcpy(arcdir,dirname);
 
 	complete_path(arcdir,"arc.dir", 0);
@@ -396,7 +396,7 @@ SEXP get_lab_data(SEXP directory, SEXP coverage, SEXP filename)
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
 
-	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)),1);/*FIXME*/
+	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)),1);
 
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileLAB)))
 		error("Error opening file");
@@ -472,7 +472,7 @@ SEXP get_cnt_data(SEXP directory, SEXP coverage, SEXP filename)
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
-	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)),1);/*FIXME*/
+	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)),1);
 
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileCNT)))
 		error("Error opening file");
@@ -558,7 +558,7 @@ SEXP get_tol_data(SEXP directory, SEXP coverage, SEXP filename)
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
-	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)), 1);/*FIXME*/
+	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)), 1);
 
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileTOL)))
 		error("Error opening file");
@@ -620,7 +620,7 @@ SEXP get_txt_data(SEXP directory, SEXP coverage, SEXP filename)
 
 
 	strcpy(pathtofile, CHAR(STRING_ELT(directory,0)));
-	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)), 1);/*FIXME*/
+	complete_path(pathtofile, (char *) CHAR(STRING_ELT(coverage,0)), 1);
 
 	if(!(file=AVCBinReadOpen(pathtofile,CHAR(STRING_ELT(filename,0)), AVCFileTXT)))
 		error("Error opening file");

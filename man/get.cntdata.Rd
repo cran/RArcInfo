@@ -31,5 +31,9 @@ The second element in the list is an array with the label identifiers related
 to this polygon.
 }
 
+\references{
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 
 \keyword{file}

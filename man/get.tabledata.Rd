@@ -19,5 +19,9 @@ data of a field from the table. The columns are not assigned the names
 of the fields, but this can be got with the get.tablefields function.
 }
 
+\references{
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 
 \keyword{file}

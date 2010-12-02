@@ -21,5 +21,9 @@ stores the data (usually called 'COVERAGENAME.BND').}
 A vector with the  x min, y min, x max and y max values.
 }
 
+\references{
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 
 \keyword{file}

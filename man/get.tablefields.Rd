@@ -40,5 +40,9 @@ This is an integer from 1 to 6 that explain the kind of data:
 	}
 }
 
+\references{
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 
 \keyword{file}

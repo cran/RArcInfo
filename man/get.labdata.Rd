@@ -35,4 +35,8 @@ This function returns a data frame with the next fields (by columns):
 \item{Coord3Y}{The Y component of the third coordinate.}
 }
 
+\references{
+More information about this kind of data can be found at
+\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+}
 \keyword{file}
