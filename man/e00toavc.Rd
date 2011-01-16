@@ -25,10 +25,6 @@ Returns 'NULL' on exit.
 
 \seealso{avctoe00}
 
-\references{
-More information about this topic can be found at
-\url{http://pages.infinit.net/danmo/e00/index-avce00.html}.
-}
 
 \keyword{file}
 

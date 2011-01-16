@@ -16,81 +16,58 @@ it provides functions to plot the data and draw maps.
 function to read each file. These functions are called get.XXXdata, where XXX is the
 file name to open (usually the extension is 'adf'):
 
-\item get.arcdata
+\describe{
+\item{get.arcdata}{ARC files contain arcs definition and their vertices.}
 
- ARC files contain arcs definition and their vertices.
+\item{get.bnddata}{BND files contain coordinates for the boundary of the data.}
 
-\item get.bnddata
+\item{get.cntdata}{CNT files contain polygon centroid information.}
 
- BND files contain coordinates for the boundary of the data.
+\item{get.labdata}{LAB files contain label point records.}
 
-\item get.cntdata
+\item{get.paldata}{PAL files contain the polygon definitions.}
 
- CNT files contain polygon centroid information.
+\item{get.toldata}{TOL files contain the tolerance values that were used when processing the polygon coverage.}
 
-\item get.labdata
-
- LAB files contain label point records.
-
-\item get.paldata
-
- PAL files contain the polygon definitions.
-
-\item get.toldata
-
- TOL files contain the tolerance values that were used when processing the polygon coverage.
-
-\item get.txtdata
-
- TXT files contain annotations (or labels) about the data.
+\item{get.txtdata}{TXT files contain annotations (or labels) about the data.}
+}
 
 
  Besides these files, binary coverage store several tables containing additional information
 (like name of the city, population, etc.). To get this data, RArcInfo provides the
 next functions:
+\describe{
 
 
-\item get.tablenames 
+\item{get.tablenames}{Gets all the table names and the coverage each table belongs to.}
 
- Gets all the table names and the coverage each table belongs to.
+\item{get.tablefields}{Gets the names of the fields for a given table.}
 
-\item get.tablefields
+\item{get.tabledata}{Gets the data stored in the table.}
 
- Gets the names of the fields for a given table.
 
-\item get.tabledata
-
- Gets the data stored in the table.
-
+}
 
 In order to plot the data, RArcInfo has several functions:
 
-\item plotarc
+\describe{
 
- Plots all the arcs.
+\item{plotarc}{Plots all the arcs.}
 
-\item plotpal
+\item{plotpal}{Plots all the polygons.}
 
- Plots all the polygons.
+\item{plotpoly}{Like plotpal, but it allows to select the polygons we want to plot, colour and other stuff. This is useful to plot maps according the value of some covariate.}
+}
 
-\item plotpoly
-
- Like plotpal, but it allows to select the polygons we want to plot, colour and 
-other stuff. This is useful to plot maps according the value of some covariate.
-  
 
 To get all the names of the coverages, the user can call 'get.namesofcoverages'.
-
 Other two interesting functions are:
 
-\item thinlines
+\describe{
+\item{thinlines}{Useful to reduce the number of points in an arc according to a given tolerance.}
 
- Useful to reduce the number of points in an arc according to a given
- tolerance.
-
-\item get.nb
-
- Calculates the neighbouring polygons of a given set of polygons.
+\item{get.nb}{Calculates the neighbouring polygons of a given set of polygons.}
+}
 }
 
 
@@ -104,7 +81,8 @@ V. Gómez-Rubio and A. López-Quílez (2005). RArcInfo: Using GIS data
   with R. Computers & Geosciences 3(8), 1000-1006.
 
 More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+\url{http://avce00.maptools.org/docs/v7_bin_cover.html}.
+
 }
 
 \examples{

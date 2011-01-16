@@ -27,9 +27,5 @@ This function returns a data frame with the next fields (columns):
 \item{Value}{Tolerance value.}
 }
 
-\references{
-More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
-}
 
 \keyword{file}
