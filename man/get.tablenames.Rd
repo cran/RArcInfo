@@ -34,9 +34,5 @@ A list with some information about the tables stored in all the coverages:
 	}
 }
 
-\references{
-More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
-}
 
 \keyword{file}

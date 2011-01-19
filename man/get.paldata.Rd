@@ -24,7 +24,7 @@ a data frame with the next fields (columns):
 \item{MinY}{Minimum value for all the Y component of the coordinates.}
 \item{MaxX}{Maximum value for all the X component of the coordinates.}
 \item{MaxY}{Maximum value for all the Y component of the coordinates.}
-\item{NArcs}{Number of arcs.}
+\item{NArcs}{?}
 
 The second element in the list is also a list in which each element is
 composed by three arrays with information about the polygons that 
@@ -32,9 +32,5 @@ are in the polygon boundary:  'Arc ID', 'From Node' and 'Adjacent Polygon'.
 }
 
 
-\references{
-More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
-}
 
 \keyword{file}

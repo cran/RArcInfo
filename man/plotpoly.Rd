@@ -57,9 +57,6 @@ library(RArcInfo)
 e00toavc("valencia.e00", "valencia")
 
 
-library(RColorBrewer)
-library(RArcInfo)
-
 #Read map data
 arcsmuni<-get.arcdata(".", "valencia")
 palmuni<-get.paldata(".", "valencia")
@@ -85,6 +82,8 @@ breaks<-quantile(unemp[,2], c(0,  .025,.2, .8, .975, 1))
 
 unemp<-cbind(unemp, CAT=as.ordered(cut(unemp[,2], breaks, include.lowest = TRUE) ))
 
+
+library(RColorBrewer)
 
 #Colors to be used in maps
 #colors<-brewer.pal(5, "Oranges")

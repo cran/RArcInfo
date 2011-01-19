@@ -16,8 +16,7 @@ it provides functions to plot the data and draw maps.
 function to read each file. These functions are called get.XXXdata, where XXX is the
 file name to open (usually the extension is 'adf'):
 
-\itemize{
-
+\describe{
 \item{get.arcdata}{ARC files contain arcs definition and their vertices.}
 
 \item{get.bnddata}{BND files contain coordinates for the boundary of the data.}
@@ -33,21 +32,25 @@ file name to open (usually the extension is 'adf'):
 \item{get.txtdata}{TXT files contain annotations (or labels) about the data.}
 }
 
+
  Besides these files, binary coverage store several tables containing additional information
 (like name of the city, population, etc.). To get this data, RArcInfo provides the
 next functions:
+\describe{
 
-\itemize{
+
 \item{get.tablenames}{Gets all the table names and the coverage each table belongs to.}
 
 \item{get.tablefields}{Gets the names of the fields for a given table.}
 
 \item{get.tabledata}{Gets the data stored in the table.}
+
+
 }
 
 In order to plot the data, RArcInfo has several functions:
 
-\itemize{
+\describe{
 
 \item{plotarc}{Plots all the arcs.}
 
@@ -56,18 +59,15 @@ In order to plot the data, RArcInfo has several functions:
 \item{plotpoly}{Like plotpal, but it allows to select the polygons we want to plot, colour and other stuff. This is useful to plot maps according the value of some covariate.}
 }
 
-To get all the names of the coverages, the user can call 'get.namesofcoverages'.
 
+To get all the names of the coverages, the user can call 'get.namesofcoverages'.
 Other two interesting functions are:
 
-\itemize{
-
+\describe{
 \item{thinlines}{Useful to reduce the number of points in an arc according to a given tolerance.}
 
 \item{get.nb}{Calculates the neighbouring polygons of a given set of polygons.}
 }
-
-
 }
 
 
@@ -81,7 +81,8 @@ V. Gómez-Rubio and A. López-Quílez (2005). RArcInfo: Using GIS data
   with R. Computers & Geosciences 3(8), 1000-1006.
 
 More information about this kind of data can be found at
-\url{http://pages.infinit.net/danmo/e00/docs/v7_bin_cover.html}.
+\url{http://avce00.maptools.org/docs/v7_bin_cover.html}.
+
 }
 
 \examples{

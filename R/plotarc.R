@@ -1,7 +1,7 @@
 #Plots all the arcs imported from an ARC file by get.arcdata
 
 #New: T for new plots
-plotarc<-function(arc, new=TRUE, index=NULL, xlim=NULL, ylim=NULL, ...)
+plotarc<-function(arc, new=TRUE, index=NULL, xlim, ylim, ...)
 {
 	if(is.null(index))
 		index<-1:length(arc[[2]])
@@ -13,7 +13,7 @@ plotarc<-function(arc, new=TRUE, index=NULL, xlim=NULL, ylim=NULL, ...)
 
 	if(new==TRUE)
 	{
-		if(is.null(xlim) || is.null(ylim) )
+		if(missing(xlim) || missing(ylim) )
 		{
 			#Calculate the boundary
 
