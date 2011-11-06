@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: cpl_string.c,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+ * $Id: cpl_string.c,v 1.2 2011/11/03 17:06:31 rsbivand Exp $
  *
  * Name:     cpl_string.cpp
  * Project:  CPL - Common Portability Library
@@ -29,6 +29,9 @@
  **********************************************************************
  *
  * $Log: cpl_string.c,v $
+ * Revision 1.2  2011/11/03 17:06:31  rsbivand
+ * R 2.14 cleanup
+ *
  * Revision 1.1.1.1  2001/06/27 20:10:53  vir
  * Initial release (0.1) under the cvs tree at Sourceforge.
  *
@@ -301,21 +304,34 @@ int  CSLSave(char **papszStrList, const char *pszFname)
  *
  * Returns the number of lines printed.
  **********************************************************************/
+#include<R.h>
+#include<Rinternals.h>
+#include<Rdefines.h>
 int  CSLPrint(char **papszStrList, FILE *fpOut)
 {
     int     nLines=0;
 
-    if (fpOut == NULL)
-        fpOut = stdout;
-
-    if (papszStrList)
-    {
+    if (fpOut == NULL) {
+// suggestion Kurt Hornik 111103 RSB
+      if (papszStrList)
+      {
+        while(*papszStrList != NULL)
+        {
+            Rprintf("%s\n", *papszStrList);
+            nLines++;
+            papszStrList++;
+        }
+      }
+    } else {
+      if (papszStrList)
+      {
         while(*papszStrList != NULL)
         {
             VSIFPrintf(fpOut, "%s\n", *papszStrList);
             nLines++;
             papszStrList++;
         }
+      }
     }
 
     return nLines;

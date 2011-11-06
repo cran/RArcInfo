@@ -18,7 +18,7 @@ setwd(tmpdir)
 #Convert E00 file to a binary covertage to be imported into R
 
 #Comment this line if the file valencia.e00 already exists
-zip.file.extract(file="valencia.e00", zipname="valencia.zip")
+unzip(zipfile="valencia.zip", file="valencia.e00")
 
 #Comments this lines if the binary coverage already exists
 library(RArcInfo)

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: cpl_error.c,v 1.1.1.1 2001/06/27 20:10:53 vir Exp $
+ * $Id: cpl_error.c,v 1.3 2011/11/06 22:34:22 vir Exp $
  *
  * Name:     cpl_error.cpp
  * Project:  CPL - Common Portability Library
@@ -29,6 +29,12 @@
  **********************************************************************
  *
  * $Log: cpl_error.c,v $
+ * Revision 1.3  2011/11/06 22:34:22  vir
+ * Header file added to avoid warning or error() function.
+ *
+ * Revision 1.2  2011/11/03 17:06:31  rsbivand
+ * R 2.14 cleanup
+ *
  * Revision 1.1.1.1  2001/06/27 20:10:53  vir
  * Initial release (0.1) under the cvs tree at Sourceforge.
  *
@@ -67,6 +73,7 @@
  *
  **********************************************************************/
 
+#include <R.h>
 #include "cpl_error.h"
 #include "cpl_vsi.h"
 
@@ -135,7 +142,7 @@ void    CPLError(CPLErr eErrClass, int err_no, const char *fmt, ...)
         gpfnCPLErrorHandler(eErrClass, err_no, gszCPLLastErrMsg);
 
     if( eErrClass == CE_Fatal )
-        abort();
+        error("CPL fatal error");
 }
 
 /************************************************************************/
@@ -274,16 +281,19 @@ const char* CPLGetLastErrorMsg()
 /*                       CPLDefaultErrorHandler()                       */
 /************************************************************************/
 
+#include<R.h>
+#include<Rinternals.h>
+#include<Rdefines.h>
 static void CPLDefaultErrorHandler( CPLErr eErrClass, int nError, 
                                     const char * pszErrorMsg )
 
 {
     static int       bLogInit = FALSE;
-    static FILE *    fpLog;
+//    static FILE *    fpLog;
 
-    fpLog = stderr;
+//    fpLog = stderr;
 
-    if( !bLogInit )
+/*    if( !bLogInit )
     {
         bLogInit = TRUE;
 
@@ -293,16 +303,16 @@ static void CPLDefaultErrorHandler( CPLErr eErrClass, int nError,
             if( fpLog == NULL )
                 fpLog = stderr;
         }
-    }
+    } */
 
     if( eErrClass == CE_Debug )
-        fprintf( fpLog, "%s\n", pszErrorMsg );
+        Rprintf("%s\n", pszErrorMsg );
     else if( eErrClass == CE_Warning )
-        fprintf( fpLog, "Warning %d: %s\n", nError, pszErrorMsg );
+        warning("Warning %d: %s\n", nError, pszErrorMsg );
     else
-        fprintf( fpLog, "ERROR %d: %s\n", nError, pszErrorMsg );
+        error("ERROR %d: %s\n", nError, pszErrorMsg );
 
-    fflush( fpLog );
+//    fflush( fpLog );
 }
 
 
